@@ -50,23 +50,23 @@ struct Matrix {
 		}
 		return tag;
 	}
-};
 
-istream &operator >> (istream &is, Matrix &mat) {
-	for (int i = 1; i <= mat.r; i ++) {
-		for (int j = 1; j <= mat.c; j ++) {
-			is >> mat.mat[i][j];
+	friend istream &operator >> (istream &is, Matrix &mat) {
+		for (int i = 1; i <= mat.r; i ++) {
+			for (int j = 1; j <= mat.c; j ++) {
+				is >> mat.mat[i][j];
+			}
 		}
+		return is;
 	}
-	return is;
-}
 
-ostream &operator << (ostream &os, const Matrix &mat) {
-	for (int i = 1; i <= mat.r; i ++) {
-		os << 'x' << i << '=' << mat.mat[i][mat.c] << '\n';
+	friend ostream &operator << (ostream &os, const Matrix &mat) {
+		for (int i = 1; i <= mat.r; i ++) {
+			os << 'x' << i << '=' << mat.mat[i][mat.c] << '\n';
+		}
+		return os;
 	}
-	return os;
-}
+};
 
 int main() {
     ios::sync_with_stdio(false);
