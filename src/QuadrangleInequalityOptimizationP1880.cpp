@@ -19,9 +19,8 @@ int main() {
     int n;
     cin >> n;
 
-    vector<int> a(2 * n + 1);
-    vector<int> pre(2 * n + 1, 0);
-    vector<vector<vector<int>>> dp(2, vector<vector<int>>(2 * n + 1, vector<int>(2 * n + 1, 0)));
+    vector<int> a(2 * n + 1), pre(2 * n + 1);
+    vector<vector<vector<int>>> dp(2, vector<vector<int>>(2 * n + 1, vector<int>(2 * n + 1)));
     for (int i = 0; i <= 2 * n; i ++) {
         for (int j = 0; j <= 2 * n; j ++) {
             dp[0][i][j] = INT_MAX;

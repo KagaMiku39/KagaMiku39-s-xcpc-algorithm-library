@@ -25,7 +25,7 @@ int main() {
     }
 
     int idx = 0, top = 0, cnt = 0;
-    vector<int> dfn(2 * n + 1, 0), low(2 * n + 1, 0), stk, scc(2 * n + 1, 0);
+    vector<int> dfn(2 * n + 1), low(2 * n + 1), stk, scc(2 * n + 1);
     auto tarjan = [&](auto self, int u) -> void {
         dfn[u] = low[u] = ++ idx;
         stk.emplace_back(u);

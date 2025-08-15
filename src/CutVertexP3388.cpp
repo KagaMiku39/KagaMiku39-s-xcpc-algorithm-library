@@ -27,7 +27,7 @@ int main() {
     for (int i = 1; i <= n; i ++) {
         if (dfn[i] == 0) {
             int rt = i;
-            auto tarjan = [&](auto self, int u, int p) -> void {
+            auto tarjan = [&](auto &self, int u, int p) -> void {
                 dfn[u] = ++ idx;
                 low[u] = dfn[u];
                 int ch = 0;

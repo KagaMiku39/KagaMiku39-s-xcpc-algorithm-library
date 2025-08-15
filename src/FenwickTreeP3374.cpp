@@ -2,12 +2,13 @@
 
 using namespace std;
 
+template<typename T>
 struct FenwickTree {
     int n;
 
-    vector<int> bit;
+    vector<T> bit;
 
-    FenwickTree(int n, vector<int> &vec) : n(n), bit(n + 1) {
+    FenwickTree(int n, vector<T> &vec) : n(n), bit(n + 1) {
         for (int i = 1; i <= n; i ++) {
             add(i, vec[i]);
         }
@@ -24,12 +25,12 @@ struct FenwickTree {
         }
     }
     
-    int query(int lo, int ro) {
+    T query(int lo, int ro) {
         return query(ro) - query(lo - 1);
     }
     
-    int query(int pos) {
-        int res = 0;
+    T query(int pos) {
+        T res = 0;
         while (pos) {
             res += bit[pos];
             pos -= lowbit(pos);
@@ -50,7 +51,7 @@ int main() {
         cin >> vec[i];
     }
 
-    FenwickTree bit(n, vec);
+    FenwickTree<int> bit(n, vec);
     
     while (m --) {
         int opt, x;

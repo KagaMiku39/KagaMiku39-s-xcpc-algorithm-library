@@ -34,7 +34,7 @@ int main() {
     int idx = 0, cnt = 0;
     vector<vector<int>> t(n + 1);
     vector<int> dfn(n + 1), low(n + 1), scc(n + 1), stk, instk(n + 1);
-    auto tarjan = [&](auto self, int u) -> void {
+    auto tarjan = [&](auto &self, int u) -> void {
         dfn[u] = ++idx;
         low[u] = dfn[u];
         stk.emplace_back(u);
@@ -65,7 +65,7 @@ int main() {
         }
     }
     
-    vector<int> w(cnt + 1, 0);
+    vector<int> w(cnt + 1);
     for (int i = 1; i <= n; i ++) {
         w[scc[i]] += a[i];
     }
@@ -78,9 +78,8 @@ int main() {
         }
     }
 
-    vector<int> dp(cnt + 1, 0);
-    vector<int> vis(cnt + 1, 0);
-    auto dfs = [&](auto self, int u) -> void {
+    vector<int> dp(cnt + 1), vis(cnt + 1);
+    auto dfs = [&](auto &self, int u) -> void {
         vis[u] = 1;
         for (int& v : t[u]) {
             if (!vis[v]) {

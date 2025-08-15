@@ -20,7 +20,7 @@ int main() {
     }
     
     vector<int> vis(n + 1), stk;
-    auto dfs1 = [&](auto self, int u) -> void {
+    auto dfs1 = [&](auto &self, int u) -> void {
         vis[u] = true;
         for (int &v: adj[u]) {
             if (!vis[v]) {
@@ -32,7 +32,7 @@ int main() {
 
     int cnt = 0;
     vector<int> scc(n + 1);
-    auto dfs2 = [&](auto self, int u) -> void {
+    auto dfs2 = [&](auto &self, int u) -> void {
         vis[u] = true;
         scc[u] = cnt;
         for (int &v: radj[u]) {
@@ -50,7 +50,7 @@ int main() {
     
     fill(next(begin(vis)), end(vis), false);
     
-    for (int i = ssize(stk) - 1; i >= 0; i --) {
+    for (int i = ssize(stk) - 1; ~i; i --) {
         int u = stk[i];
         if (!vis[u]) {
             cnt ++;

@@ -22,8 +22,8 @@ int main() {
     vector<int> c(n + 1, -1);
     for (int i = 1; i <= n; i ++) {
         if (!~c[i]) {
-            array<int, 2> sum{};
-            auto dfs = [&](auto self, int u, int col) -> bool {
+            int sum[2]{};
+            auto dfs = [&](auto &self, int u, int col) -> bool {
                 c[u] = col;
                 sum[col] ++;
                 for (int &v: adj[u]) {
@@ -37,8 +37,6 @@ int main() {
                 }
                 return false;
             };
-            sum[0] = 0;
-            sum[1] = 0;
             if (dfs(dfs, i, 1)) {
                 ok = true;
                 break;

@@ -67,7 +67,7 @@ int main() {
         ans[scc[i]].emplace_back(i);
     }
     
-    vector<int> vis(cnt + 1, 0);
+    vector<int> vis(cnt + 1);
     for (int i = 1; i <= n; i ++) {
         if (!vis[scc[i]]) {
             sort(begin(ans[scc[i]]), end(ans[scc[i]]));

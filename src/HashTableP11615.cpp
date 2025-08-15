@@ -2,6 +2,7 @@
 
 using namespace std;
 
+using i64 = long long;
 using u64 = unsigned long long;
 
 namespace FastIO {
@@ -85,21 +86,40 @@ namespace FastIO {
 
 using namespace FastIO;
 
-struct Hash {
-    static u64 rnd;
+// struct Hash {
+//     static u64 rnd;
 
-    size_t operator () (const u64 &x) const{
-        return x ^ rnd;
+//     size_t operator () (const u64 &x) const{
+//         return x ^ rnd;
+//     }
+// };
+
+// u64 Hash::rnd{mt19937_64(chrono::steady_clock::now().time_since_epoch().count())()};
+
+#include<ext/pb_ds/assoc_container.hpp>
+
+using namespace __gnu_pbds;
+
+struct Hash {
+    static u64 splitmix64(u64 x) {
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
+    
+    size_t operator()(u64 x) const {
+        static const i64 rnd{chrono::steady_clock::now().time_since_epoch().count()};
+        return splitmix64(x + rnd);
     }
 };
-
-u64 Hash::rnd{mt19937_64(chrono::steady_clock::now().time_since_epoch().count())()};
 
 int main() {
     int n = input<int>();
 
     u64 ans = 0;
-    unordered_map<u64, u64, Hash> ump;
+    // unordered_map<u64, u64, Hash> ump;
+    gp_hash_table<u64, u64, Hash> ump;
     for (int i = 1; i <= n; i ++) {
         u64 x = input<u64>(), y = input<u64>();
         ans += i * ump[x];

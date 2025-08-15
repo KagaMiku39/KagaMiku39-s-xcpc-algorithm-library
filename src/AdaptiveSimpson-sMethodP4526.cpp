@@ -12,7 +12,7 @@ int main() {
     cin >> a;
 
     if (a < 0) {
-        cout << "orz" << '\n';
+        cout << "orz\n";
         return 0;
     }
 
