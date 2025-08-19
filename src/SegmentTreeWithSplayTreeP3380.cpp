@@ -50,8 +50,7 @@ struct SegmentTreeWithSplayTree {
     }
 
     void rotate(int u) {
-        int p = spl[u].p, pp = spl[p].p;
-        int dir = (spl[p].ch[1] == u);
+        int p = spl[u].p, pp = spl[p].p, dir = (spl[p].ch[1] == u);
         if (pp) {
             spl[pp].ch[spl[pp].ch[1] == p] = u;
         }

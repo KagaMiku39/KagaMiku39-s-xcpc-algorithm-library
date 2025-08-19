@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 
+#define ssize(x) int(x.size())
+
 using namespace std;
 
 template<typename T>
@@ -21,23 +23,24 @@ int main() {
         adj[u].emplace_back(v, w);
     }
 
-    vector<int> dis(n + 1, INT_MAX);
+    vector<int> dis(n + 1, INT_MAX), vis(n + 1);
+    queue<int> q;
     dis[s] = 0;
-    for (int i = 1; i < n; i ++) {
-        bool tag = false;
-        for (int u = 1; u <= n; u ++) {
-            if (dis[u] == INT_MAX) {
+    vis[s] = true;
+    q.emplace(s);
+    while (ssize(q)) {
+        int u = q.front(), d = dis[u];
+        vis[u] = false;
+        q.pop();
+        for (auto &[v, w]: adj[u]) {
+            if (!cmin(dis[v], d + w) || vis[v]) {
                 continue;
             }
-            for (auto &[v, w]: adj[u]) {
-                tag |= cmin(dis[v], dis[u] + w);
-            }
-        }
-        if (!tag) {
-            break;
+            vis[v] = true;
+            q.emplace(v);
         }
     }
-    
+
     for (int i = 1; i <= n; i ++) {
         cout << dis[i] << " \n"[i == n];
     }
