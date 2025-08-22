@@ -59,13 +59,13 @@ struct SplayTree {
             }
             rotate(u);
         }
-        if (v == 0) {
+        if (!v) {
             rt = u;
         }
     }
 
     void find(T val) {
-        if (rt == 0) {
+        if (!rt) {
             return;
         }
         int u = rt;
