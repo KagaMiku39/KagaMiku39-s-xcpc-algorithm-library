@@ -16,7 +16,7 @@ int main() {
         if (lnis.empty() || h <= lnis.back()) {
             lnis.emplace_back(h);
         } else {
-            *upper_bound(begin(lnis), end(lnis), h, [](const int &l, const int &r) {
+            *upper_bound(begin(lnis), end(lnis), h, [&](const int &l, const int &r) {
                 return l > r;
             }) = h;
         }

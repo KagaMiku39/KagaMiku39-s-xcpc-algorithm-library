@@ -20,8 +20,8 @@ int main() {
         adj[v].emplace_back(u);
     }
     
-    vector<vector<int>> p(n + 1, vector<int>(logn + 1));
     vector<int> dep(n + 1);
+    vector<vector<int>> p(n + 1, vector<int>(logn + 1));
     dep[1] = 1;
     auto dfs = [&](auto self, int u, int pa) -> void {
         for (int i = 1; i <= logn; i ++) {
