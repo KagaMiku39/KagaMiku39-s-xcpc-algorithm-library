@@ -18,7 +18,7 @@ struct FenwickTree {
         return x & -x;
     }
 
-    void add(int pos, int val) {
+    void add(int pos, T val) {
         while (pos <= n) {
             bit[pos] += val;
             pos += lowbit(pos);
