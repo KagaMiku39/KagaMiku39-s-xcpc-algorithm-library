@@ -8,6 +8,7 @@
     </div>
   </div>
 </div>
+
 <div style="page-break-after: always;"></div>
 
 <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;">
@@ -15,39 +16,6 @@
     数据结构
   </div>
 </div>
+
 <div style="page-break-after: always;"></div>
 
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;">
-  <div style="font-size: 4rem; font-weight: 900; color: #a3d8c6; margin: 0; padding: 0;">
-    图论
-  </div>
-</div>
-<div style="page-break-after: always;"></div>
-
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;">
-  <div style="font-size: 4rem; font-weight: 900; color: #8FE0DA; margin: 0; padding: 0;">
-    数学
-  </div>
-</div>
-<div style="page-break-after: always;"></div>
-
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;">
-  <div style="font-size: 4rem; font-weight: 900; color: #a8d8ea; margin: 0; padding: 0;">
-    计算几何
-  </div>
-</div>
-<div style="page-break-after: always;"></div>
-
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;">
-  <div style="font-size: 4rem; font-weight: 900; color: #E2D0E0; margin: 0; padding: 0;">
-    字符串
-  </div>
-</div>
-<div style="page-break-after: always;"></div>
-
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;">
-  <div style="font-size: 4rem; font-weight: 900; color: #FAE3C6; margin: 0; padding: 0;">
-    其他算法
-  </div>
-</div>
-<div style="page-break-after: always;"></div>

@@ -1,26 +1,34 @@
 #include <bits/stdc++.h>
 
-#define ssize(x) int(x.size())
-
 using namespace std;
 
-using u32 = unsigned;
 using i64 = long long;
-using u64 = unsigned long long; 
-using i128 = __int128; 
-
-template<typename T>
-bool cmin(T &a, const T &b) {
-    return a > b ? a = b, true : false;
-}
-
-template<typename T>
-bool cmax(T &a, const T &b) {
-    return a < b ? a = b, true : false;
-}
 
 void solve() {   
-    
+    int n;
+    cin >> n;
+
+    vector<int> p(n + 1);
+    for (int i = 1; i <= n; i ++) {
+        cin >> p[i];
+    }
+
+    i64 ans = 0;
+    for (int i = 1; i <= n; i ++) {
+        int pre = 0;
+        vector<i64> mp(2 * n + 1);
+        mp[pre + n] = 1;
+        for (int j = 1; j < i; j ++) {
+            pre += p[j] > p[i] ? -1 : 1;
+            mp[pre + n] += j + 1;
+        }
+        for (int j = i; j <= n; j ++) {
+            pre += i != j ? p[j] > p[i] ? -1 : 1 : 0;
+            ans += mp[pre + n] * p[i] * j; 
+        }
+    }
+
+    cout << ans << '\n';
 }
 
 int main() {
