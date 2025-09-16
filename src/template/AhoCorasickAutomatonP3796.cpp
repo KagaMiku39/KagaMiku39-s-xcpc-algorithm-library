@@ -97,12 +97,9 @@ int main() {
             cin >> s[i];
             ac.insert(s[i], i);
         }
-        
         ac.build();
-        
         string t;
         cin >> t;
-        
         ac.solve(n, t, s);
     }
 
