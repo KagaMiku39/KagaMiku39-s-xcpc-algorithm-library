@@ -7,11 +7,11 @@ bool cmax(T &a, const T &b) {
     return a < b ? a = b, true : false;
 }
 
-#define lc 2 * cur
-#define rc 2 * cur + 1
-
 template<typename T>
 struct SegmentTree {
+    #define lc 2 * cur
+    #define rc 2 * cur + 1
+
     int n;
     
     vector<T> vec; 

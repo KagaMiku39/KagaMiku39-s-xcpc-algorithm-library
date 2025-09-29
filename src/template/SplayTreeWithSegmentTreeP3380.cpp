@@ -255,7 +255,7 @@ struct SegmentTreeWithSplayTree {
             return getpre(seg[cur], val);
         }
         int mid = (s + t) / 2;
-        T res = -numeric_limits<T>::max(); // FIX: Changed from numeric_limits<T>::min()
+        T res = -numeric_limits<T>::max();
         if (lo <= mid) {
             cmax(res, querypre(lc, s, mid, lo, ro, val));
         }
@@ -310,7 +310,7 @@ int main() {
         cin >> vec[i];
     }
 
-    SegmentTreeWithSplayTree<int> segspl(n, vec);
+    SegmentTreeWithSplayTree<int> splseg(n, vec);
 
     while (m --) {
         int opt;
@@ -318,27 +318,27 @@ int main() {
         if (opt == 1) {
             int x, y, k;
             cin >> x >> y >> k;
-            cout << segspl.queryrank(x, y, k) << '\n';
+            cout << splseg.queryrank(x, y, k) << '\n';
         }
         if (opt == 2) {
             int x, y, k;
             cin >> x >> y >> k;
-            cout << segspl.queryval(x, y, k) << '\n';
+            cout << splseg.queryval(x, y, k) << '\n';
         }
         if (opt == 3) {
             int x, k;
             cin >> x >> k;
-            segspl.update(x, k);
+            splseg.update(x, k);
         } 
         if (opt == 4) {
             int x, y, k;
             cin >> x >> y >> k;
-            cout << segspl.querypre(x, y, k) << '\n';
+            cout << splseg.querypre(x, y, k) << '\n';
         }
         if (opt == 5) {
             int x, y, k;
             cin >> x >> y >> k;
-            cout << segspl.querysuc(x, y, k) << '\n';
+            cout << splseg.querysuc(x, y, k) << '\n';
         }
     }
 
