@@ -10,7 +10,7 @@ int main() {
     cin >> n >> m >> e;
 
     vector<vector<int>> adj(n + 1);
-    for (int i = 0; i < e; i ++) {
+    for (int i = 1; i <= e; i ++) {
         int u, v;
         cin >> u >> v;
         adj[u].emplace_back(v);

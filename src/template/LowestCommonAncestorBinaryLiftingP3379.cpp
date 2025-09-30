@@ -21,17 +21,17 @@ int main() {
     }
     
     vector<int> dep(n + 1);
-    vector<vector<int>> p(n + 1, vector<int>(logn + 1));
+    vector<vector<int>> up(n + 1, vector<int>(logn + 1));
     dep[1] = 1;
     auto dfs = [&](auto self, int u, int pa) -> void {
         for (int i = 1; i <= logn; i ++) {
-            p[u][i] = p[p[u][i - 1]][i - 1];
+            up[u][i] = up[up[u][i - 1]][i - 1];
         }
         for (auto v: adj[u]) {
             if (v == pa) {
                 continue;
             }
-            p[v][0] = u;
+            up[v][0] = u;
             dep[v] = dep[u] + 1;
             self(self, v, u);
         }
@@ -44,19 +44,19 @@ int main() {
         }
         for (int i = logn; ~i; i --) {
             if (dep[u] - (1 << i) >= dep[v]) {
-                u = p[u][i];
+                u = up[u][i];
             }
         }
         if (u == v) {
             return u;
         }
         for (int i = logn; ~i; i --) {
-            if (p[u][i] != p[v][i]) {
-                u = p[u][i];
-                v = p[v][i];
+            if (up[u][i] != up[v][i]) {
+                u = up[u][i];
+                v = up[v][i];
             }
         }
-        return p[u][0];
+        return up[u][0];
     };
     
     for (int i = 1, a, b; i <= m; i ++) {

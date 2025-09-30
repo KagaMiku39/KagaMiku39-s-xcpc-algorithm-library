@@ -14,14 +14,14 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    vector<pair<int, int>> edges(m + 1);
     vector<vector<int>> adj(n + 1);
+    vector<pair<int, int>> edg(m + 1);
     for (int i = 1; i <= m; i ++) {
         int u, v;
         cin >> u >> v;
         adj[u].emplace_back(i);
         adj[v].emplace_back(i);
-        edges[i] = {u, v};
+        edg[i] = {u, v};
     }
     
     int idx = 0;
@@ -34,7 +34,7 @@ int main() {
             if (eid == pid) {
                 continue;
             }
-            int v = edges[eid].first ^ edges[eid].second ^ u;
+            int v = edg[eid].first ^ edg[eid].second ^ u;
             if (dfn[v] == 0) {
                 self(self, v, eid);
                 cmin(low[u], low[v]);
