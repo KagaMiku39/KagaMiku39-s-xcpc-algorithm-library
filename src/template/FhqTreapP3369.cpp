@@ -6,6 +6,9 @@ using u64 = unsigned long long;
 
 template<typename T>
 struct FhqTreap {
+    #define lc fhq[cur].ch[0]
+    #define rc fhq[cur].ch[1]
+
     inline static mt19937_64 rnd = mt19937_64(chrono::steady_clock::now().time_since_epoch().count());
     
     int root, idx{};
@@ -33,14 +36,8 @@ struct FhqTreap {
 
     void pushup(int cur) {
         if (cur) {
-            fhq[cur].sz = fhq[fhq[cur].ch[0]].sz + fhq[fhq[cur].ch[1]].sz + 1;
+            fhq[cur].sz = fhq[lc].sz + fhq[rc].sz + 1;
         }
-    }
-
-    int newnode(T val) {
-        idx ++;
-        fhq.emplace_back(val);
-        return idx;
     }
 
     void split(int cur, T val, int &lt, int &root) {
@@ -50,10 +47,10 @@ struct FhqTreap {
         }
         if (fhq[cur].val <= val) {
             lt = cur;
-            split(fhq[cur].ch[1], val, fhq[lt].ch[1], root);
+            split(rc, val, fhq[lt].ch[1], root);
         } else {
             root = cur;
-            split(fhq[cur].ch[0], val, lt, fhq[root].ch[0]);
+            split(lc, val, lt, fhq[root].ch[0]);
         }
         pushup(cur);
     }
@@ -71,6 +68,12 @@ struct FhqTreap {
             pushup(rcur);
             return rcur;
         }
+    }
+
+    int newnode(T val) {
+        idx ++;
+        fhq.emplace_back(val);
+        return idx;
     }
 
     void insert(T val) {
@@ -103,14 +106,14 @@ struct FhqTreap {
     
     int getval(int cur, int rk) {
         while (cur) {
-            int sz = fhq[fhq[cur].ch[0]].sz;
+            int sz = fhq[lc].sz;
             if (sz + 1 > rk) {
-                cur = fhq[cur].ch[0];
+                cur = lc;
             } else if (sz + 1 == rk) {
                 break;
             } else {
                 rk -= sz + 1;
-                cur = fhq[cur].ch[1];
+                cur = rc;
             }
         }
         return cur;
@@ -140,7 +143,6 @@ struct FhqTreap {
         return res;
     }
 };
-
 
 int main() {
     ios::sync_with_stdio(false);

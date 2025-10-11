@@ -14,6 +14,7 @@ struct DisjointSetUnion {
             x = p[x] = p[p[x]];
         }
         return x;
+        // return p[x] == x ? x : p[x] = find(p[x]);
     }
 
     // void merge(int a, int b) {

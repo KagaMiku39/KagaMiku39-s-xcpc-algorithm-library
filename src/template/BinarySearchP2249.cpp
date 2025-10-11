@@ -18,7 +18,7 @@ int main() {
         int num;
         cin >> num;
         int lo = 0, ro = n;
-        auto pred = [&](int x) -> bool {
+        auto pred = [&](int x) {
             return a[x] >= num;
         };
         while (lo + 1 < ro) {

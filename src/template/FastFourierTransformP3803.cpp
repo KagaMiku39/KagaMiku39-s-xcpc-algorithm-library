@@ -29,7 +29,7 @@ int main() {
 
     int len = 1;
     while (len <= n + m) {
-        len <<= 1;
+        len *= 2;
     }
 
     vector<Complex> a(len), b(len);
@@ -43,18 +43,17 @@ int main() {
     vector<int> r(len);
     auto fft = [&](vector<Complex> &vec, int n, int op) {
         for (int i = 0; i < n; i ++) {
-            r[i] = (r[i >> 1] >> 1) | ((i & 1) ? (n >> 1) : 0);
+            r[i] = (r[i / 2] / 2) | (i & 1 ? n / 2 : 0);
         }
         for (int i = 0; i < n; i ++) {
             if (i < r[i]) {
                 swap(vec[i], vec[r[i]]);
             }
         }
-
-        for (int i = 2; i <= n; i <<= 1) {
-            Complex w1({cos(2 * PI / i), sin(2 * PI / i) * op});
+        for (int i = 2; i <= n; i *= 2) {
+            Complex w1{cos(2 * PI / i), sin(2 * PI / i) * op};
             for (int j = 0; j < n; j += i) {
-                Complex wk({1, 0});
+                Complex wk{1, 0};
                 for (int k = j; k < j + i / 2; k ++) {
                     Complex x = vec[k], y = vec[k + i / 2] * wk;
                     vec[k] = x + y;

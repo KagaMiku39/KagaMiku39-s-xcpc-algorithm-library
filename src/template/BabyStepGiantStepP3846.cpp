@@ -53,11 +53,11 @@ int main() {
         return -1;
     };
 
-    i64 ans = bsgs();
-    if (ans == -1) {
+    i64 res = bsgs();
+    if (res == -1) {
         cout << "no solution\n";
     } else {
-        cout << ans << '\n';
+        cout << res << '\n';
     }
 
     return 0;
