@@ -4,7 +4,9 @@ using namespace std;
 
 constexpr int maxn = 1e8 + 1;
 
-bitset<maxn> isprime;
+bitset<maxn> ispri;
+
+vector<int> pri;
 
 int main() {
     ios::sync_with_stdio(false);
@@ -13,18 +15,17 @@ int main() {
     int n, q; 
     cin >> n >> q;
     
-    vector<int> prime;
-    isprime.set();
-    isprime[0] = isprime[1] = false;
+    ispri.set();
+    ispri[0] = ispri[1] = false;
     for (int i = 2; i < maxn; i ++) {
-        if (isprime[i]) {
-            prime.emplace_back(i);
+        if (ispri[i]) {
+            pri.emplace_back(i);
         }
-        for (int &j: prime) {
+        for (int &j: pri) {
             if (1ll * i * j > maxn) {
                 break;
             }
-            isprime[i * j] = false;
+            ispri[i * j] = false;
             if (i % j == 0) {
                 break;
             }
@@ -34,7 +35,7 @@ int main() {
     while (q --) {
         int k;
         cin >> k;
-        cout << prime[k - 1] << '\n';
+        cout << pri[k - 1] << '\n';
     }
 
     return 0;

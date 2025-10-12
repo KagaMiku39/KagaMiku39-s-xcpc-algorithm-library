@@ -12,29 +12,29 @@ int main() {
         for (int i = 1; i <= n; i ++) {
             cin >> a[i] >> b[i];
         }
-        auto calc = [&]() {
-            vector<int> c(m + 1);
-            for (int i = a[1]; i <= b[1]; i ++) {
-                if (i <= m) {
-                    c[i] = 1;
-                }
+        
+        vector<int> c(m + 1);
+        for (int i = a[1]; i <= b[1]; i ++) {
+            if (i <= m) {
+                c[i] = 1;
             }
-            for (int i = 2; i <= n; i ++) {
-                vector<int> d(m + 1);
-                for (int j = 0; j <= m; j ++) {
-                    if (c[j] > 0) {
-                        for (int k = a[i]; k <= b[i]; k ++) {
-                            if (j + k <= m) {
-                                d[j + k] += c[j];
-                            }
+        }
+        
+        for (int i = 2; i <= n; i ++) {
+            vector<int> d(m + 1);
+            for (int j = 0; j <= m; j ++) {
+                if (c[j] > 0) {
+                    for (int k = a[i]; k <= b[i]; k ++) {
+                        if (j + k <= m) {
+                            d[j + k] += c[j];
                         }
                     }
                 }
-                c = d;
             }
-            return c[m];
-        };
-        cout << calc() << '\n';
+            c = d;
+        }
+
+        cout << c[m] << '\n';
     }
 
     return 0;

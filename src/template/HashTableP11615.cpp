@@ -88,6 +88,7 @@ using namespace FastIO;
 
 // struct Hash {
 //     static u64 rnd;
+//     // inline static u64 rnd{mt19937_64(chrono::steady_clock::now().time_since_epoch().count())()};
 
 //     size_t operator () (const u64 &x) const{
 //         return x ^ rnd;
