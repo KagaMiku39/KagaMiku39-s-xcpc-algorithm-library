@@ -41,7 +41,6 @@ int main() {
     };
     dfs1(dfs1, 1, 0);
 
-    
     int mx = 0;
     i64 sum = 0;
     vector<int> col(n + 1);

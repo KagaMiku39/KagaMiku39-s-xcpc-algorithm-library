@@ -8,7 +8,7 @@ template<typename T>
 struct ChtollyTree {
     map<int, T> odt;
 
-    ChtollyTree(int n, vector<T> &vec) {
+    ChtollyTree(int n, const vector<T> &vec) {
         odt[0] = 0; 
         for (int i = 1; i <= n; i ++) {
             odt[i] = vec[i];

@@ -12,7 +12,7 @@ int main() {
         fac[i] = fac[i - 1] * i;
     }
 
-    int n, m;
+    int n = 0, m = 0;
     while (cin >> n >> m) {
         vector<int> vec(n + 1);
         for (int i = 1; i <= n; i ++) {

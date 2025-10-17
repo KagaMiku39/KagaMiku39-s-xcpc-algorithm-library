@@ -51,7 +51,6 @@ struct BigInteger {
         for (int i = 0; i < ssize(s); i ++) {
             a[i] = s[ssize(s) - 1 - i] - '0';
         }
-        
         for (int i = 0; i < ssize(a); i ++) {
             car += a[i] * x;
             res += car % 10 + '0';
@@ -61,7 +60,6 @@ struct BigInteger {
             res += car % 10 + '0';
             car /= 10;
         }
-
         reverse(begin(res), end(res));
         getstr(res);
         return BigInteger{res};

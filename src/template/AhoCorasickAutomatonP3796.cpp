@@ -61,7 +61,7 @@ struct AhoCorasickAutomaton {
     }
 
     void solve(int n, string& t, vector<string>& s) {
-        vector<int> cnt(n + 1, 0);
+        vector<int> cnt(n + 1);
         int cur = 0;
         for (char &ch: t) {
             int id = ch - 'a';

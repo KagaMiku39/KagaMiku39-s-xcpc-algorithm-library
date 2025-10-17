@@ -17,6 +17,11 @@ struct DisjointSetUnion {
         // return p[x] == x ? x : p[x] = find(p[x]);
     }
 
+    void merge(int a, int b) {
+        p[find(a)] = b;
+        // p[find(a)] = find(b);
+    }
+    
     // void merge(int a, int b) {
     //     int pa = find(a), pb = find(b);
     //     if (pa == pb) {
@@ -29,17 +34,17 @@ struct DisjointSetUnion {
     //     rk[pb] += rk[pa] == rk[pb];
     // }
 
-    void merge(int a, int b) {
-        int pa = find(a), pb = find(b);
-        if (pa == pb) {
-            return;
-        }
-        if (sz[pa] > sz[pb]) {
-            swap(pa, pb);
-        }
-        p[pa] = pb;
-        sz[pb] += sz[pa];
-    }
+    // void merge(int a, int b) {
+    //     int pa = find(a), pb = find(b);
+    //     if (pa == pb) {
+    //         return;
+    //     }
+    //     if (sz[pa] > sz[pb]) {
+    //         swap(pa, pb);
+    //     }
+    //     p[pa] = pb;
+    //     sz[pb] += sz[pa];
+    // }
 };
 
 int main() {

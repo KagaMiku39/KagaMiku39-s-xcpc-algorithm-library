@@ -31,7 +31,8 @@ int main() {
                         if (self(self, v, col ^ 1)) {
                             return true;
                         }
-                    } else if (c[v] == col) {
+                    }
+                    if (c[v] == col) {
                         return true;
                     }
                 }

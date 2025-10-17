@@ -62,19 +62,19 @@ int main() {
     }
 
     for (int i = 1; i <= n; i ++) {
-        vector<int> dis(n + 1, INT_MAX), vis(n + 1);
+        vector<int> vis(n + 1), dis(n + 1, INT_MAX);
         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
         pq.emplace(0, i);
         dis[i] = 0;
         while (ssize(pq)) {
-            auto [val, u] = pq.top();
+            auto [d, u] = pq.top();
             pq.pop();
             if (vis[u]) {
                 continue;
             }
             vis[u] = true;
             for (auto &[v, w]: adj[u]) {
-                if (cmin(dis[v], val + w)) {
+                if (cmin(dis[v], d + w)) {
                     pq.emplace(dis[v], v);
                 }
             }

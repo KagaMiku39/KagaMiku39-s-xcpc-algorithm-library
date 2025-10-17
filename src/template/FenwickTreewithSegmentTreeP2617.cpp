@@ -10,9 +10,9 @@ struct FenwickTreeWithSegmentTree {
     vector<int> vec, mp;
 
     struct Node {
-        int sum{};
+        int sum;
 
-        array<int, 2> ch{};
+        array<int, 2> ch;
     };
     vector<Node> seg;
     
@@ -20,7 +20,7 @@ struct FenwickTreeWithSegmentTree {
 
     vector<int> rt, rt1, rt2;
     
-    FenwickTreeWithSegmentTree(int n, int mx, vector<int>& vec, vector<int>& mp) : n(n), mx(mx), vec(vec), mp(mp), rt(n + 1), seg(400 * n) {}
+    FenwickTreeWithSegmentTree(int n, int mx, const vector<int>& vec, const vector<int>& mp) : n(n), mx(mx), vec(vec), mp(mp), rt(n + 1), seg(400 * n) {}
 
     int lowbit(int x) {
         return x & -x;
@@ -85,12 +85,12 @@ struct FenwickTreeWithSegmentTree {
         rt2.clear();
         int x = lo - 1;
         while (x > 0) {
-            rt1.push_back(rt[x]);
+            rt1.emplace_back(rt[x]);
             x -= lowbit(x);
         }
         int y = ro;
         while (y > 0) {
-            rt2.push_back(rt[y]);
+            rt2.emplace_back(rt[y]);
             y -= lowbit(y);
         }
         return mp[getrank(1, mx, k)];
@@ -111,15 +111,15 @@ int main() {
     cin >> n >> m;
 
     vector<int> a(n + 1), vec;
-    vec.push_back(0);
+    vec.emplace_back(0);
 
     for (int i = 1; i <= n; i ++) {
         cin >> a[i];
-        vec.push_back(a[i]);
+        vec.emplace_back(a[i]);
     }
 
-    vector<tuple<char, int, int, int>> que(m);
-    for (int i = 0; i < m; i ++) {
+    vector<tuple<char, int, int, int>> que(m + 1);
+    for (int i = 1; i <= m; i ++) {
         char type;
         cin >> type;
         if (type == 'Q') {
@@ -130,7 +130,7 @@ int main() {
             int pos, val;
             cin >> pos >> val;
             que[i] = {type, pos, val, 0};
-            vec.push_back(val);
+            vec.emplace_back(val);
         }
     }
 
@@ -144,7 +144,8 @@ int main() {
         bitseg.update(i, 1);
     }
 
-    for (auto& [op, a, b, c] : que) {
+    for (int i = 1; i <= m; i ++) {
+        auto &[op, a, b, c] = que[i];
         if (op == 'Q') {
             cout << bitseg.query(a, b, c) << '\n';
         } else {

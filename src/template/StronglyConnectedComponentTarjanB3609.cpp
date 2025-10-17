@@ -9,11 +9,6 @@ bool cmin(T &a, T &b) {
 	return a > b ? a = b, true : false;
 }
 
-template<typename T>
-bool cmax(T &a, T &b) {
-	return a < b ? a = b, true : false;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);

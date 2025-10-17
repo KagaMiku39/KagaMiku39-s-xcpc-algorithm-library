@@ -16,28 +16,8 @@ struct DisjointSetUnion {
         return x;
     }
 
-    // void merge(int a, int b) {
-    //     int pa = find(a), pb = find(b);
-    //     if (pa == pb) {
-    //         return;
-    //     }
-    //     if (rk[pa] > rk[pb]) {
-    //         swap(pa, pb);
-    //     }
-    //     p[pa] = pb;
-    //     rk[pb] += rk[pa] == rk[pb];
-    // }
-
     void merge(int a, int b) {
-        int pa = find(a), pb = find(b);
-        if (pa == pb) {
-            return;
-        }
-        if (sz[pa] > sz[pb]) {
-            swap(pa, pb);
-        }
-        p[pa] = pb;
-        sz[pb] += sz[pa];
+        p[find(a)] = b;
     }
 };
 
@@ -47,11 +27,8 @@ int main() {
 
     int n, m, s;
     cin >> n >> m >> s;
-
+    
     vector<vector<int>> adj(n + 1);
-    
-    vector<vector<pair<int, int>>> q(n + 1);
-    
     for (int i = 1; i < n; i ++) {
         int u, v; 
         cin >> u >> v;
@@ -59,16 +36,17 @@ int main() {
         adj[v].emplace_back(u);
     }
     
+    vector<vector<pair<int, int>>> que(n + 1);
     for (int i = 1; i <= m; i ++) {
         int a, b; 
         cin >> a >> b;
-        q[a].emplace_back(i, b);
-        q[b].emplace_back(i, a);
+        que[a].emplace_back(i, b);
+        que[b].emplace_back(i, a);
     }
     
     DisjointSetUnion dsu(n);
     vector<int> vis(n + 1), ans(m + 1);
-    auto tarjan = [&](auto self, int u) -> void {
+    auto tarjan = [&](auto &self, int u) -> void {
         vis[u] = 1;
         for (int &v: adj[u]) {
             if (!vis[v]) {
@@ -76,7 +54,7 @@ int main() {
                 dsu.p[dsu.find(v)] = u;
             }
         }
-        for (auto &[id, nd]: q[u]) {
+        for (auto &[id, nd]: que[u]) {
             if (vis[nd]) {
                 ans[id] = dsu.find(nd);
             }

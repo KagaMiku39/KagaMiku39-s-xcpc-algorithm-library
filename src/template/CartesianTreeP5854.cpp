@@ -6,7 +6,10 @@ using namespace std;
 
 using i64 = long long;
 
-void solve() {
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int n;
     cin >> n;
     
@@ -32,20 +35,13 @@ void solve() {
         stk.emplace_back(i);
     }
     
-    i64 ans[2]{};
+    i64 ans1 = 0, ans2 = 0;
     for (int i = 1; i <= n; i ++) {
-        ans[0] ^= 1ll * i * (l[i] + 1);
-        ans[1] ^= 1ll * i * (r[i] + 1);
+        ans1 ^= 1ll * i * (l[i] + 1);
+        ans2 ^= 1ll * i * (r[i] + 1);
     }
     
-    cout << ans[0] << ' ' << ans[1] << '\n';
-}
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    solve();
+    cout << ans1 << ' ' << ans2 << '\n';
 
     return 0;
 }

@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 
-#define ssize(x) int(x.size())
-
 using namespace std;
 
 template<typename T>
@@ -26,7 +24,7 @@ int main() {
 
     vector<int> key(k + 1);
     vector<vector<int>> dp(n + 1, vector<int>(1 << k, INT_MAX));
-    for (int i = 1; i <= k; i++) {
+    for (int i = 1; i <= k; i ++) {
         cin >> key[i];
         dp[key[i]][1 << (i - 1)] = 0;
     }

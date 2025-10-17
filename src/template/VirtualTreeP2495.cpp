@@ -9,23 +9,21 @@ using i64 = long long;
 constexpr int logn = 20;
 
 struct VirtualTree {
-    int n;
+    int n, cnt{};
 
     vector<vector<pair<int, int>>> adj;
-
+    
     vector<vector<int>> p;
-
+    
     vector<int> dep, dfn;
     
     vector<i64> mi;
-    
-    int dfncnt;
     
     vector<vector<int>> vadj;
 
     vector<char> iskey;
 
-    VirtualTree(int n) : n(n), adj(n + 1), p(n + 1, vector<int>(logn + 1)), dep(n + 1), dfn(n + 1), mi(n + 1), vadj(n + 1), iskey(n + 1), dfncnt{} {}
+    VirtualTree(int n) : n(n), adj(n + 1), p(n + 1, vector<int>(logn + 1)), dep(n + 1), dfn(n + 1), mi(n + 1), vadj(n + 1), iskey(n + 1) {}
 
     void addedge(int u, int v, int w) {
         adj[u].emplace_back(v, w);
@@ -40,7 +38,7 @@ struct VirtualTree {
     i64 solve() {
         int k;
         cin >> k;
-        if (k == 0) {
+        if (!k) {
             return 0;
         }
         vector<int> a(k + 1);
@@ -55,7 +53,7 @@ struct VirtualTree {
         vector<int> vec;
         build(a, vec);
         i64 res = getdp(1);
-        for (int u : vec) {
+        for (int &u : vec) {
             vadj[u].clear();
         }
         for (int i = 1; i < ssize(a); i ++) {
@@ -65,10 +63,9 @@ struct VirtualTree {
     }
 
     void dfs(int u, int pa) {
-        dfn[u] = ++ dfncnt;
+        dfn[u] = ++ cnt;
         p[u][0] = pa;
         dep[u] = dep[pa] + 1;
-
         for (int i = 1; i <= logn; i ++) {
             p[u][i] = p[p[u][i - 1]][i - 1];
         }
@@ -102,11 +99,11 @@ struct VirtualTree {
         return p[u][0];
     }
 
-    void build(vector<int>& a, vector<int>& vec) {
+    void build(vector<int> &a, vector<int> &vec) {
         vector<int> s;
         s.emplace_back(1);
         vec.emplace_back(1);
-        for (int i = 1; i < (int)ssize(a); i ++) {
+        for (int i = 1; i < ssize(a); i ++) {
             int u = a[i];
             if (u == 1) {
                 continue;

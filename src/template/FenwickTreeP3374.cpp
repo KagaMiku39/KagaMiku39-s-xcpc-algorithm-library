@@ -8,7 +8,7 @@ struct FenwickTree {
 
     vector<T> bit;
 
-    FenwickTree(int n, vector<T> &vec) : n(n), bit(n + 1) {
+    FenwickTree(int n, const vector<T> &vec) : n(n), bit(n + 1) {
         for (int i = 1; i <= n; i ++) {
             add(i, vec[i]);
         }

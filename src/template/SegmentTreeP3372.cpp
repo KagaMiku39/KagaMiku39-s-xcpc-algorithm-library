@@ -6,35 +6,53 @@ using i64 = long long;
 
 template<typename T>
 struct SegmentTree {
-    #define lc 2 * cur
-    #define rc 2 * cur + 1
-
+    // #define lc 2 * cur
+    #define lc seg[cur].ch[0]
+    // #define rc 2 * cur + 1
+    #define rc seg[cur].ch[1]
+    
     int n;
+
+    int idx{};
     
     vector<T> vec; 
 
     struct Node {
         T val, tag;
+
+        array<int, 2> ch;
     };
     vector<Node> seg;
 
-    SegmentTree(int n, vector<T> &vec) : n(n), vec(vec), seg(4 * (n + 1)) {
-        build(1, 1, n);
+    // SegmentTree(int n, const vector<T> &vec) : n(n), vec(vec), seg(4 * n)) {
+    //     build(1, 1, n);
+    // }
+
+    SegmentTree(int n, const vector<T> &vec) : n(n), vec(vec) {
+        seg.emplace_back();
+        build(1, n);
     }
 
     void pushup(int cur) {
         seg[cur].val = seg[lc].val + seg[rc].val; 
     }
 
-    void build(int cur, int s, int t) {
+    // void build(int cur, int s, int t) {
+    int build(int s, int t) {
+        seg.emplace_back();
+        int cur = ++ idx;    
         if (s == t) {
             seg[cur].val = vec[s];
-            return;
+            // return;
+            return cur;
         }
         int mid = (s + t) / 2;
-        build(lc, s, mid);
-        build(rc, mid + 1, t);
+        // build(lc, s, mid);
+        lc = build(s, mid);
+        // build(rc, mid + 1, t);
+        rc = build(mid + 1, t);
         pushup(cur);
+        return cur;
     }
 
     void pushdown(int cur, int s, int t, int mid) {

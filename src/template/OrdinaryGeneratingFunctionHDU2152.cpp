@@ -6,7 +6,7 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    int n, m;
+    int n = 0, m = 0;
     while (cin >> n >> m) {
         vector<int> a(n + 1), b(n + 1);
         for (int i = 1; i <= n; i ++) {

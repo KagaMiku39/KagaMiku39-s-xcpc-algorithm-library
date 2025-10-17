@@ -3,18 +3,22 @@
 using namespace std;
 
 struct Trie {
+    static constexpr int maxsz = 3e6 + 1;
+    
     int idx{}; 
     
-    struct Node{
+    struct Node {
         int id, cnt;
         
         array<int, 62> adj;
     };
     vector<Node> tr; 
     
-    Trie() {
-        tr.emplace_back(); 
-    }
+    // Trie() {
+    //     tr.emplace_back(); 
+    // }
+
+    Trie() : tr(maxsz) {}
     
     int getid(char ch) {
         if (isdigit(ch)) {
@@ -33,7 +37,7 @@ struct Trie {
             int id = getid(ch);
             if (!tr[cur].adj[id]) {
                 tr[cur].adj[id] = ++ idx;
-                tr.emplace_back();
+                // tr.emplace_back();
             }
             cur = tr[cur].adj[id];
             tr[cur].cnt ++;
@@ -51,7 +55,16 @@ struct Trie {
         }
         return tr[cur].cnt;
     }
+
+    // void clear() {
+    //     for (int i = 0; i <= idx; i ++) {
+    //         tr[i] = Node{};
+    //     }
+    //     idx = 0;
+    // }
 };
+
+// Trie tr;
 
 void solve() {
     int n, q;
@@ -70,6 +83,8 @@ void solve() {
         cin >> s;
         cout << tr.query(s) << '\n';
     }
+
+    // tr.clear();
 }
 
 int main() {

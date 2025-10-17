@@ -12,11 +12,10 @@ struct SegmentTreeWithSegmentTree {
     };
     vector<NodeX> segx;
     
-    
     struct NodeY {
-        int sum{};
+        int sum;
 
-        array<int, 2> ch{};
+        array<int, 2> ch;
     };
     vector<NodeY> segy;
 
@@ -24,9 +23,9 @@ struct SegmentTreeWithSegmentTree {
 
     void updatey(int &cur, int s, int t, int c) {
         if (!cur) {
-            cur = ++idxy;
+            cur = ++ idxy;
         }
-        segy[cur].sum++;
+        segy[cur].sum ++;
         if (s == t) {
             return;
         }
@@ -40,7 +39,7 @@ struct SegmentTreeWithSegmentTree {
 
     void updatex(int & cur, int s, int t, tuple<int, int, int> &ele) {
         if (!cur) {
-            cur = ++idxx;
+            cur = ++ idxx;
         }
         updatey(segx[cur].rty, 1, k, get<2>(ele));
         if (s == t) {
@@ -84,8 +83,8 @@ struct SegmentTreeWithSegmentTree {
         return res;
     }
 
-    void add(tuple<int, int, int> & elem) {
-        updatex(rtx, 1, k, elem);
+    void add(tuple<int, int, int> &ele) {
+        updatex(rtx, 1, k, ele);
     }
 
     int query(int b, int c) {

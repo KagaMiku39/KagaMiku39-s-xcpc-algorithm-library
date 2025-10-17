@@ -9,6 +9,16 @@ bool cmin(T &a, const T &b) {
     return a > b ? a = b, true : false;
 }
 
+struct Node {
+    int d, u;
+
+    Node(int d, int u) : d(d), u(u) {}
+    
+    bool operator < (const Node &x) const {
+        return d > x.d;
+    }
+};
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -24,20 +34,23 @@ int main() {
     }
 
     vector<int> vis(n + 1), dis(n + 1, INT_MAX);
+    // priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    // priority_queue<pair<int, int>> pq;
+    priority_queue<Node> pq;
     dis[s] = 0;
-
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
     pq.emplace(0, s);
     while (ssize(pq)) {
-        auto [val, u] = pq.top();
+        auto [d, u] = pq.top();
         pq.pop();
         if (vis[u]) {
             continue;
         }
+        // d = -d;
         vis[u] = true;
         for (auto &[v, w]: adj[u]) {
-            if (!vis[v] && cmin(dis[v], val + w)) {
-                pq.emplace(val + w, v);
+            if (!vis[v] && cmin(dis[v], d + w)) {
+                // pq.emplace(-(d + w), v);
+                pq.emplace(d + w, v);
             }
         }
     }

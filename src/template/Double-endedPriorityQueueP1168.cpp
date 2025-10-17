@@ -26,7 +26,7 @@ int main() {
             } else {
                 le.emplace(a[i]);
             }
-        }else {
+        } else {
             mid = a[i];
         }
         if (abs(ssize(le) - ssize(gr)) > 1) {

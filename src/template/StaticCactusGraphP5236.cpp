@@ -87,10 +87,10 @@ int main() {
     };
     dfs(dfs, 1, 0, 0, 1);
 
-    int uson = 0, vson = 0;
+    int uc = 0, vc = 0;
     auto lca = [&](int u, int v) {
         if (dep[u] < dep[v]) swap(u, v);
-        for (int i = logn - 1; i >= 0; --i) {
+        for (int i = logn - 1; ~i; --i) {
             if (dep[up[u][i]] >= dep[v]) {
                 u = up[u][i];
             }
@@ -98,18 +98,18 @@ int main() {
         if (u == v) {
             return u;
         }
-        for (int i = logn - 1; i >= 0; --i) {
+        for (int i = logn - 1; ~i; --i) {
             if (up[u][i] != up[v][i]) {
                 u = up[u][i];
                 v = up[v][i];
             }
         }
-        uson = u;
-        vson = v;
+        uc = u;
+        vc = v;
         return up[u][0];
     };
 
-    while (q--) {
+    while (q --) {
         int u, v;
         cin >> u >> v;
         int p = lca(u, v);
@@ -117,8 +117,8 @@ int main() {
             cout << dis[u] + dis[v] - 2 * dis[p] << '\n';
         } 
         else {
-            i64 len = abs(dcyc[uson] - dcyc[vson]), dab = min(len, lcyc[uson] - len);
-            cout << dis[u] + dis[v] - dis[uson] - dis[vson] + dab << '\n';
+            i64 len = abs(dcyc[uc] - dcyc[vc]), dab = min(len, lcyc[uc] - len);
+            cout << dis[u] + dis[v] - dis[uc] - dis[vc] + dab << '\n';
         }
     }
 

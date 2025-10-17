@@ -1,11 +1,6 @@
 #include <bits/stdc++.h>
 
-#define ssize(x) int(x.size())
-
 using namespace std;
-
-using i64 = long long;
-using u64 = unsigned long long; 
 
 template<typename T>
 bool cmin(T &a, const T &b) {

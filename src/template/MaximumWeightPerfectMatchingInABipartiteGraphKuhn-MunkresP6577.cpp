@@ -38,8 +38,8 @@ int main() {
 
     vector<int> mat(n + 1);
     for (int i = 1; i <= n; i ++) {
-        vector<i64> d(n + 1, LLONG_MAX);
         vector<int> p(n + 1), vb(n + 1);
+        vector<i64> d(n + 1, LLONG_MAX);
         mat[0] = i;
         int v = 0;
         while (true) {

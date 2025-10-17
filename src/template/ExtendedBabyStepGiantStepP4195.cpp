@@ -3,6 +3,18 @@
 using namespace std;
 
 using i64 = long long;
+using u64 = unsigned long long;
+
+struct Hash {
+    static u64 rnd;
+    // inline static u64 rnd{mt19937_64(chrono::steady_clock::now().time_since_epoch().count())()};
+
+    size_t operator () (const int &x) const{
+        return x ^ rnd;
+    }
+};
+
+u64 Hash::rnd{mt19937_64(chrono::steady_clock::now().time_since_epoch().count())()};
 
 int main() {
     ios::sync_with_stdio(false);
@@ -11,7 +23,6 @@ int main() {
     int a, mod, b;
 
     while ((cin >> a >> mod >> b) && (a || mod || b)) {
-        
         auto binpow = [&](int a, int b, int mod) {
             int res = 1 % mod;
             a %= mod;
@@ -24,7 +35,6 @@ int main() {
             }
             return res;
         };
-
         auto exbsgs = [=]() mutable -> i64 {
             a %= mod;
             b %= mod;
@@ -46,13 +56,13 @@ int main() {
                 }
                 mod /= d;
                 b /= d;
-                k++;
+                k ++;
                 c = c * (a / d) % mod;
                 if (c == b) {
                     return k;
                 }
             }
-            unordered_map<int, int> ump;
+            unordered_map<int, int, Hash> ump;
             int ste = sqrt(mod) + 1;
             for (int j = 0; j < ste; j ++) {
                 int val = 1ll * b * binpow(a, j, mod) % mod;

@@ -18,26 +18,18 @@ struct KDTree {
 
     const int dimension = 2;
 
-    int n;
+    int n{}, rt{}, cur{}, dim{};
 
     double ans = 2e18;
-
-    int rt, cur;
 
     struct Node {
         array<int, 2> ch;
 
-        double v[2], low[2], up[2];
+        array<double, 2> v, low, up;
     };
     vector<Node> kdt;
 
-    int dim;
-
     KDTree() {
-        n = 0;
-        rt = 0;
-        cur = 0;
-        dim = 0;
         kdt.emplace_back();
     }
 

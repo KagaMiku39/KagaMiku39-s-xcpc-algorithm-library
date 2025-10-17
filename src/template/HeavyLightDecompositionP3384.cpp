@@ -4,11 +4,11 @@ using namespace std;
 
 using i64 = long long;
 
-#define lc 2 * cur
-#define rc 2 * cur + 1
-
 template<typename T>
 struct SegmentTree {
+    #define lc 2 * cur
+    #define rc 2 * cur + 1
+
     int n, mod;
     
     vector<T> vec; 
@@ -18,7 +18,7 @@ struct SegmentTree {
     };
     vector<Node> st;
 
-    SegmentTree(int n, int mod, vector<T> &vec) : n(n), mod(mod), vec(vec), st(4 * (n + 1)) {
+    SegmentTree(int n, int mod, const vector<T> &vec) : n(n), mod(mod), vec(vec), st(4 * n) {
         build(1, 1, n);
     }
 

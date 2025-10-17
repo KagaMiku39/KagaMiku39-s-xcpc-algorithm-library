@@ -21,7 +21,7 @@ struct SegmentTree {
     };
     vector<Node> st;
 
-    SegmentTree(int n, vector<T> &vec) : n(n), vec(vec), st(4 * (n + 1)) {
+    SegmentTree(int n, const vector<T> &vec) : n(n), vec(vec), st(4 * n) {
         build(1, 1, n);
     }
 

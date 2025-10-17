@@ -16,7 +16,7 @@ void solve() {
     sort(a.begin() + 1, a.end());
 
     vector<int> b(n + 1);
-    for (int i = n; i >= 1; i --) {
+    for (int i = n; i; i --) {
         b[n - i + 1] = a[i] - a[i - 1] - 1;
     }
 

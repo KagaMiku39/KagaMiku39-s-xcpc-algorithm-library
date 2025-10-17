@@ -9,13 +9,13 @@ struct LinkCutTree {
 
         int p;
 
-        array<int, 2> ch;
-        
         bool tag;
+        
+        array<int, 2> ch;
     };
     vector<Node> lct;
 
-    LinkCutTree(int n, vector<T>& vec) : lct(n + 1) {
+    LinkCutTree(int n, const vector<T> &vec) : lct(n + 1) {
         lct[0].val = lct[0].sum = T();
         for (int i = 1; i <= n; i ++) {
             lct[i].val = vec[i];
