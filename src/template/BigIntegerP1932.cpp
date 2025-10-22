@@ -4,7 +4,7 @@
 
 using namespace std;
 
-struct BigInteger {
+struct BigInteger {    
     // inline static double PI = acos(-1);
 
     static constexpr int g = 3, mod = 998244353;
@@ -51,9 +51,58 @@ struct BigInteger {
         return false;
     }
     
+    BigInteger operator + (const int &x) const {
+        if (x == 0) {
+            return *this;
+        }
+        if (s == "0") {
+            return {to_string(x)};
+        }
+        if (s[0] == '-' && x < 0) {
+            return {'-' + (BigInteger{s.substr(1)} + (-x)).s};
+        }
+        if (s[0] == '-') {
+            return BigInteger{to_string(x)} - BigInteger{s.substr(1)};
+        }
+        if (x < 0) {
+            return *this - (-x);
+        }
+        vector<int> a(ssize(s)), b;
+        int tmp = x;
+        while (tmp) {
+            b.emplace_back(tmp % 10);
+            tmp /= 10;
+        }
+        for (int i = 0; i < ssize(s); i ++) {
+            a[i] = s[ssize(s) - 1 - i] - '0';
+        }
+        int car = 0;
+        string res;
+        for (int i = 0; i < max(ssize(a), ssize(b)); i ++) {
+            if (i < ssize(a)) {
+                car += a[i];
+            }
+            if (i < ssize(b)) {
+                car += b[i];
+            }
+            res += car % 10 + '0';
+            car /= 10;
+        }
+        if (car) {
+            res += '1';
+        }
+        reverse(begin(res), end(res));
+        getstr(res);
+        return {res};
+    }
+
+    BigInteger& operator += (const int &x) {
+        return *this = *this + x;
+    }
+    
     BigInteger operator + (const BigInteger &bi) const {
         if (s[0] == '-' && bi.s[0] == '-') {
-            return BigInteger{'-' + (BigInteger{s.substr(1)} + BigInteger{bi.s.substr(1)}).s};
+            return {'-' + (BigInteger{s.substr(1)} + BigInteger{bi.s.substr(1)}).s};
         }
         if (s[0] == '-') {
             return bi - BigInteger{s.substr(1)};
@@ -85,11 +134,65 @@ struct BigInteger {
         }
         reverse(begin(res), end(res));
         getstr(res);
-        return BigInteger{res};
+        return {res};
     }
     
     BigInteger& operator += (const BigInteger &bi) {
         return *this = *this + bi;
+    }
+    
+    BigInteger operator - (const int &x) const {
+        if (x == 0) {
+            return *this;
+        }
+        if (s == "0") {
+            return {to_string(-x)};
+        }
+        if (s[0] == '-' && x < 0) {
+            return BigInteger{to_string(-x)} - BigInteger{s.substr(1)};
+        }
+        if (s[0] == '-') {
+            return {'-' + (BigInteger{s.substr(1)} + x).s};
+        }
+        if (x < 0) {
+            return *this + (-x);
+        }
+        vector<int> a(ssize(s)), b;
+        int tmp = x;
+        while (tmp) {
+            b.emplace_back(tmp % 10);
+            tmp /= 10;
+        }
+        for (int i = 0; i < ssize(s); i ++) {
+            a[i] = s[ssize(s) - 1 - i] - '0';
+        }
+        bool neg = false;
+        if (ssize(a) < ssize(b) || (ssize(a) == ssize(b) && a.back() < b.back())) {
+            swap(a, b);
+            neg = true;
+        }
+        string res;
+        for (int i = 0; i < ssize(a); i ++) {
+            int j = a[i];
+            if (i < ssize(b)) {
+                j -= b[i];
+            }
+            if (j < 0) {
+                j += 10;
+                a[i + 1] --;
+            }
+            res += j + '0';
+        }
+        reverse(begin(res), end(res));
+        getstr(res);
+        if (neg && res != "0") {
+            res = '-' + res;
+        }
+        return {res};
+    }
+
+    BigInteger& operator -= (const int &x) {
+        return *this = *this - x;
     }
     
     BigInteger operator - (const BigInteger &bi) const {
@@ -97,7 +200,7 @@ struct BigInteger {
             return BigInteger{bi.s.substr(1)} - BigInteger{s.substr(1)};
         }
         if (s[0] == '-') {
-            return BigInteger{'-' + (BigInteger{s.substr(1)} + bi).s};
+            return {'-' + (BigInteger{s.substr(1)} + bi).s};
         }
         if (bi.s[0] == '-') {
             return *this + BigInteger{bi.s.substr(1)};
@@ -129,14 +232,14 @@ struct BigInteger {
         if (neg && res != "0") {
             res = '-' + res;
         }
-        return BigInteger{res};
+        return {res};
     }
     
     BigInteger& operator -= (const BigInteger &bi) {
         return *this = *this - bi;
     }
 
-    // void fft(vector<Complex> &vec, int n, int op) {
+    // void fft(vector<Complex> &vec, int n, int op) const {
     //     vector<int> r(n);
     //     for (int i = 0; i < n; i ++) {
     //         r[i] = (r[i >> 1] >> 1) | ((i & 1) ? (n >> 1) : 0);
@@ -160,18 +263,48 @@ struct BigInteger {
     //     }
     // }
 
+    BigInteger operator * (const int &x) const {
+        vector<int> a(ssize(s)), b;
+        for (int i = 0; i < ssize(s); i ++) {
+            a[i] = s[ssize(s) - 1 - i] - '0';
+        }
+        b.resize(ssize(s));
+        int car = 0;
+        for (int i = 0; i < ssize(a); i ++) {
+            b[i] = a[i] * x + car;
+            car = b[i] / 10;
+            b[i] %= 10;
+        }
+        while (car) {
+            b.emplace_back(car % 10);
+            car /= 10;
+        }
+        getvec(b);
+        string res;
+        for (auto &i : b) {
+            res += i + '0';
+        }
+        reverse(begin(res), end(res));
+        getstr(res);
+        return {res};
+    }
+
+    BigInteger& operator *= (const int &x) {
+        return *this = *this * x;
+    }
+
     BigInteger operator * (const BigInteger &bi) const {
         if (s == "0" || bi.s == "0") {
-            return BigInteger{"0"};
+            return {"0"};
         }
         if (s[0] == '-' && bi.s[0] == '-') {
             return BigInteger{s.substr(1)} * BigInteger{bi.s.substr(1)};
         }
         if (s[0] == '-') {
-            return BigInteger{'-' + (BigInteger{s.substr(1)} * bi).s};
+            return {'-' + (BigInteger{s.substr(1)} * bi).s};
         }
         if (bi.s[0] == '-') {
-            return BigInteger{'-' + (*this * BigInteger{bi.s.substr(1)}).s};
+            return {'-' + (*this * BigInteger{bi.s.substr(1)}).s};
         }
         int n = ssize(s), m = ssize(bi.s), len = 1;
         while (len < n + m) {
@@ -240,7 +373,8 @@ struct BigInteger {
         }
         ntt(a, len, -1);
         vector<int> c(len);
-        int car = 0, li = binpow(len, mod - 2);;
+        // int car = 0;
+        int car = 0, li = binpow(len, mod - 2);
         for (int i = 0; i < len; i++) {
             // int val = (int)(a[i].x / len + 0.5) + car;
             int val = (a[i] * 1ll * li % mod + mod) % mod + car;
@@ -268,43 +402,29 @@ struct BigInteger {
         }
         reverse(begin(res), end(res));
         getstr(res);
-        return BigInteger{res};
-    }
-
-    BigInteger operator * (const int &x) const {
-        vector<int> a(ssize(s)), b;
-        for (int i = 0; i < ssize(s); i ++) {
-            a[i] = s[ssize(s) - 1 - i] - '0';
-        }
-        b.resize(ssize(s));
-        int car = 0;
-        for (int i = 0; i < ssize(a); i ++) {
-            b[i] = a[i] * x + car;
-            car = b[i] / 10;
-            b[i] %= 10;
-        }
-        while (car) {
-            b.emplace_back(car % 10);
-            car /= 10;
-        }
-        getvec(b);
-        string res;
-        for (auto &i : b) {
-            res += i + '0';
-        }
-        reverse(begin(res), end(res));
-        getstr(res);
-        return BigInteger{res};
+        return {res};
     }
 
     BigInteger& operator *= (const BigInteger &bi) {
         return *this = *this * bi;
     }
 
-    BigInteger& operator *= (const int &num) {
-        return *this = *this * num;
+    BigInteger operator / (const int &x) const {
+        int r = 0;
+        string res;
+        for (auto &ch : s) {
+            r = r * 10 + ch - '0';
+            res += r / x + '0';
+            r %= x;
+        }
+        getstr(res);
+        return {res};
     }
 
+    BigInteger& operator /= (const int &x) {
+        return *this = *this / x;
+    }
+    
     BigInteger operator / (const BigInteger &bi) const {
         if (s[0] == '-' && bi.s[0] == '-') {
             return BigInteger{s.substr(1)} / BigInteger{bi.s.substr(1)};
@@ -348,29 +468,21 @@ struct BigInteger {
             res += j + '0';
         }
         getstr(res);
-        return BigInteger{res};
-    }
-
-    BigInteger operator / (const int &x) const {
-        int r = 0;
-        string res;
-        for (auto &ch : s) {
-            r = r * 10 + ch - '0';
-            res += r / x + '0';
-            r %= x;
-        }
-        getstr(res);
-        return BigInteger{res};
+        return {res};
     }
 
     BigInteger& operator /= (const BigInteger &bi) {
         return *this = *this / bi;
     }
 
-    BigInteger& operator /= (const int &x) {
-        return *this = *this / x;
+    BigInteger operator % (const int &x) const {
+        return *this - (*this / x) * x;
     }
 
+    BigInteger& operator %= (const int &x) {
+        return *this = *this % x;
+    }
+    
     BigInteger operator % (const BigInteger &bi) const {
         return *this - (*this / bi) * bi;
     }
@@ -410,18 +522,18 @@ struct BigInteger {
         }
         return s > bi.s;
     }
-};
-
-istream &operator >> (istream &is, BigInteger &bi) {
-    return is >> bi.s;
-}
-
-ostream &operator << (ostream &os, const BigInteger &bi) {
-    for (auto &ch : bi.s) {
-        os << ch;
+    
+    friend istream &operator >> (istream &is, BigInteger &bi) {
+        return is >> bi.s;
     }
-    return os;
-}
+    
+    friend ostream &operator << (ostream &os, const BigInteger &bi) {
+        for (auto &ch : bi.s) {
+            os << ch;
+        }
+        return os;
+    }
+};
 
 int main() {
     ios::sync_with_stdio(false);
