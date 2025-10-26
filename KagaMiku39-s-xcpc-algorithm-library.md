@@ -8,8 +8,6 @@
     </div>
   </div>
 </div>
-
-
 <div style="page-break-after: always;"></div>
 
 <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;">
@@ -1228,6 +1226,105 @@ int main() {
     dfs2(dfs2, 1, 0);
     
     cout << ans << '\n';
+
+    return 0;
+}
+```
+
+<div style="page-break-after: always;"></div>
+
+# B4016 树的直径
+
+## 题目描述
+
+给定一棵 $n$ 个结点的树，树没有边权。请求出树的直径是多少，即树上最长的不重复经过一个点的路径长度是多少。
+
+## 输入格式
+
+第一行输入一个正整数 $n$，表示结点个数。
+
+第二行开始，往下一共 $n-1$ 行，每一行两个正整数 $(u,v)$，表示一条边。
+
+## 输出格式
+
+输出一行，表示树的直径是多少。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5
+1 2
+2 4
+4 5
+2 3
+```
+
+### 输出 #1
+
+```
+3
+```
+
+## 说明/提示
+
+数据保证，$1 \leq n \leq 10^5$。
+
+<div style="page-break-after: always;"></div>
+
+```c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+template<typename T>
+bool cmax(T &a, const T &b) {
+    return a < b ? a = b, true : false;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    cin >> n;
+
+    vector<vector<int>> adj(n + 1);
+    for (int i = 1; i < n; i ++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].emplace_back(v);
+        adj[v].emplace_back(u);
+    } 
+
+    int dis = -1;
+    vector<int> d(n + 1), ver{-1};
+    auto dfs = [&](auto &self, int u, int p) -> void {
+        for (int &v: adj[u]) {
+            if (v == p) {
+                continue;
+            }
+            d[v] = d[u] + 1;
+            if (cmax(dis, d[v])) {
+                ver.pop_back();
+                ver.emplace_back(v);
+            }
+            self(self, v, u);
+        }
+    };
+    
+    dfs(dfs, 1, 0);
+
+    dis = -1;
+
+    d[ver.front()] = 0;
+
+    ver.emplace_back(-1);
+
+    dfs(dfs, ver.front(), 0);
+
+    cout << d[ver.back()] << '\n';
 
     return 0;
 }
