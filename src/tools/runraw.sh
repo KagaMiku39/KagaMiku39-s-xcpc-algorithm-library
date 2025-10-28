@@ -55,8 +55,8 @@ fi
 if [[ "$type" == "1" ]]; then
     if [[ ! -f "$name.cpp" ]]; then
         echo -ne "${C}Confirm execution? (y/N): ${NC}"
-        read -r ans
-        if [[ "$ans" != "y" && "$ans" != "Y" ]]; then
+        read -r out
+        if [[ "$out" != "y" && "$out" != "Y" ]]; then
             echo "${C}Execution cancelled.${NC}"
             exit 1
         fi
@@ -64,7 +64,7 @@ if [[ "$type" == "1" ]]; then
         echo -e "${C}Creating source file: $name.cpp${NC}"
         code "$name.cpp"
     fi
-    for file in "$name.ans" "$name.out" "$name.in"; do
+    for file in "$name.out" "$name.ans" "$name.in"; do
         if [[ ! -f "$file" ]]; then
             echo -e "${C}Creating file: $file${NC}"
             touch "$file"
@@ -97,7 +97,7 @@ fi
 
 if [[ "$type" == "1" ]]; then
     ok="true"
-    for file in "$name.out" "$name.in"; do
+    for file in "$name.ans" "$name.in"; do
         if [[ ! -s "$file" ]]; then
             echo -e "${R}Error: File '$file' is empty.${NC}"
             ok="false"
@@ -122,25 +122,25 @@ if [[ "$type" == "1" ]]; then
         exit 1
     fi
     
-    mv "$name.tmp" "$name.ans"
+    mv "$name.tmp" "$name.out"
     
     # 6. 比较输出结果
     echo -e "${C}Checking output against answer file...${NC}"
 
     # 使用一个变量来动态存储 diff 参数
     diffoptions="-b --ignore-trailing-space"
-    if grep -q -iE '^[[:space:]]*(yes|no)[[:space:]]*$' "$name.ans"; then
+    if grep -q -iE '^[[:space:]]*(yes|no)[[:space:]]*$' "$name.out"; then
         diffoptions="-i $diffoptions"
     fi
 
     # 执行一次 diff 命令，并检查其退出码
-    if diff -q $diffoptions "$name.out" "$name.ans" &>/dev/null; then
+    if diff -q $diffoptions "$name.ans" "$name.out" &>/dev/null; then
         echo -e "${G}Accepted${NC}"
     else
         echo -e "${R}Wrong Answer${NC}"
         # 直接在终端中打印差异
-        diff $diffoptions "$name.out" "$name.ans"
-        code --diff "$name.ans" "$name.out"
+        diff $diffoptions "$name.ans" "$name.out"
+        code --diff "$name.out" "$name.ans"
     fi
 fi
 

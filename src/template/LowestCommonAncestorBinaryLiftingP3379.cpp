@@ -10,7 +10,6 @@ int main() {
 
     int n, m, s;
     cin >> n >> m >> s;
-
     
     vector<vector<int>> adj(n + 1);
     for (int i = 1; i < n; i ++) {

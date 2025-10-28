@@ -11,8 +11,8 @@ int main() {
     int h, w;
     cin >> h >> w;
     
-    vector<vector<char>> s(h + 1, vector<char>(w + 1));
     vector<vector<int>> vis(h + 1, vector<int>(w + 1));
+    vector<vector<char>> s(h + 1, vector<char>(w + 1));
     vector<pair<int, int>> vec;
     for (int i = 1; i <= h; i ++) {
         for (int j = 1; j <= w; j ++) {

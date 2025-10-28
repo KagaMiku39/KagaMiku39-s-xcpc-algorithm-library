@@ -13,7 +13,7 @@ struct SegmentTree {
     
     int n;
 
-    int idx{};
+    int idx = 1, rt = 1;
     
     vector<T> vec; 
 
@@ -24,36 +24,30 @@ struct SegmentTree {
     };
     vector<Node> seg;
 
-    // SegmentTree(int n, const vector<T> &vec) : n(n), vec(vec), seg(4 * n)) {
+    // SegmentTree(int n, const vector<T> &vec) : n(n), vec(vec), seg(4 * n) {
     //     build(1, 1, n);
     // }
 
-    SegmentTree(int n, const vector<T> &vec) : n(n), vec(vec) {
-        seg.emplace_back();
-        build(1, n);
+    SegmentTree(int n, const vector<T> &vec) : n(n), vec(vec), seg(2 * n) {
+        for (int i = 1; i <= n; i ++) {
+            add(i, i, vec[i]);
+        }
     }
 
     void pushup(int cur) {
         seg[cur].val = seg[lc].val + seg[rc].val; 
     }
 
-    // void build(int cur, int s, int t) {
-    int build(int s, int t) {
-        seg.emplace_back();
-        int cur = ++ idx;    
-        if (s == t) {
-            seg[cur].val = vec[s];
-            // return;
-            return cur;
-        }
-        int mid = (s + t) / 2;
-        // build(lc, s, mid);
-        lc = build(s, mid);
-        // build(rc, mid + 1, t);
-        rc = build(mid + 1, t);
-        pushup(cur);
-        return cur;
-    }
+    // void build(int cur, int s, int t) {  
+    //     if (s == t) {
+    //         seg[cur].val = vec[s];
+    //         return;
+    //     }
+    //     int mid = (s + t) / 2;
+    //     build(lc, s, mid);
+    //     build(rc, mid + 1, t);
+    //     pushup(cur);
+    // }
 
     void pushdown(int cur, int s, int t, int mid) {
         if (!seg[cur].tag) {
@@ -67,16 +61,22 @@ struct SegmentTree {
     }
     
     void add(int lo, int ro, T val) {
-        add(1, 1, n, lo, ro, val);
+        // add(1, 1, n, lo, ro, val);
+        add(rt, 1, n, lo, ro, val);
     }
 
-    void add(int cur, int s, int t, int lo, int ro, T val) {
+    // void add(int cur, int s, int t, int lo, int ro, T val) {
+    void add(int &cur, int s, int t, int lo, int ro, T val) {
+        if (!cur) {
+            cur = ++ idx;
+        }
         if (lo <= s && t <= ro) {
             seg[cur].val += (t - s + 1) * val;
             seg[cur].tag += val;
             return; 
         }
-        int mid = (s + t) / 2; 
+        // int mid = (s + t) / 2; 
+        int mid = s + (t - s) / 2;
         pushdown(cur, s, t, mid);
         if (lo <= mid) {
             add(lc, s, mid, lo, ro, val);
@@ -92,10 +92,14 @@ struct SegmentTree {
     }
 
     T query(int cur, int s, int t, int lo, int ro) {
+        if (!cur) {
+            return 0;
+        }
         if (lo <= s && t <= ro) {
             return seg[cur].val;
         }
-        int mid = (s + t) / 2;
+        // int mid = (s + t) / 2;
+        int mid = s + (t - s) / 2;
         T sum = 0; 
         pushdown(cur, s, t, mid);
         if (lo <= mid) {
@@ -121,7 +125,7 @@ int main() {
         cin >> a[i];
     }
     
-    SegmentTree seg(n, a);
+    SegmentTree<i64> seg(n, a);
     
     while (m --) {
         int opt, x, y;

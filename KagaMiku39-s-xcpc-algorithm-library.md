@@ -1534,7 +1534,6 @@ int main() {
 
     int n, m, s;
     cin >> n >> m >> s;
-
     
     vector<vector<int>> adj(n + 1);
     for (int i = 1; i < n; i ++) {
@@ -1819,7 +1818,7 @@ struct SegmentTree {
     
     int n;
 
-    int idx{};
+    int idx = 1, rt = 1;
     
     vector<T> vec; 
 
@@ -1834,32 +1833,26 @@ struct SegmentTree {
     //     build(1, 1, n);
     // }
 
-    SegmentTree(int n, const vector<T> &vec) : n(n), vec(vec) {
-        seg.emplace_back();
-        build(1, n);
+    SegmentTree(int n, const vector<T> &vec) : n(n), vec(vec), seg(2 * n) {
+        for (int i = 1; i <= n; i ++) {
+            add(i, i, vec[i]);
+        }
     }
 
     void pushup(int cur) {
         seg[cur].val = seg[lc].val + seg[rc].val; 
     }
 
-    // void build(int cur, int s, int t) {
-    int build(int s, int t) {
-        seg.emplace_back();
-        int cur = ++ idx;    
-        if (s == t) {
-            seg[cur].val = vec[s];
-            // return;
-            return cur;
-        }
-        int mid = (s + t) / 2;
-        // build(lc, s, mid);
-        lc = build(s, mid);
-        // build(rc, mid + 1, t);
-        rc = build(mid + 1, t);
-        pushup(cur);
-        return cur;
-    }
+    // void build(int cur, int s, int t) {  
+    //     if (s == t) {
+    //         seg[cur].val = vec[s];
+    //         return;
+    //     }
+    //     int mid = (s + t) / 2;
+    //     build(lc, s, mid);
+    //     build(rc, mid + 1, t);
+    //     pushup(cur);
+    // }
 
     void pushdown(int cur, int s, int t, int mid) {
         if (!seg[cur].tag) {
@@ -1873,16 +1866,22 @@ struct SegmentTree {
     }
     
     void add(int lo, int ro, T val) {
-        add(1, 1, n, lo, ro, val);
+        // add(1, 1, n, lo, ro, val);
+        add(rt, 1, n, lo, ro, val);
     }
 
-    void add(int cur, int s, int t, int lo, int ro, T val) {
+    // void add(int cur, int s, int t, int lo, int ro, T val) {
+    void add(int &cur, int s, int t, int lo, int ro, T val) {
+        if (!cur) {
+            cur = ++ idx;
+        }
         if (lo <= s && t <= ro) {
             seg[cur].val += (t - s + 1) * val;
             seg[cur].tag += val;
             return; 
         }
-        int mid = (s + t) / 2; 
+        // int mid = (s + t) / 2; 
+        int mid = s + (t - s) / 2;
         pushdown(cur, s, t, mid);
         if (lo <= mid) {
             add(lc, s, mid, lo, ro, val);
@@ -1898,10 +1897,14 @@ struct SegmentTree {
     }
 
     T query(int cur, int s, int t, int lo, int ro) {
+        if (!cur) {
+            return 0;
+        }
         if (lo <= s && t <= ro) {
             return seg[cur].val;
         }
-        int mid = (s + t) / 2;
+        // int mid = (s + t) / 2;
+        int mid = s + (t - s) / 2;
         T sum = 0; 
         pushdown(cur, s, t, mid);
         if (lo <= mid) {
@@ -1927,7 +1930,7 @@ int main() {
         cin >> a[i];
     }
     
-    SegmentTree seg(n, a);
+    SegmentTree<i64> seg(n, a);
     
     while (m --) {
         int opt, x, y;
@@ -2033,7 +2036,7 @@ struct SegmentTree {
 
     int n;
 
-    int idx{};
+    // int idx = 1, rt = 1;
     
     vector<T> vec; 
     
@@ -2042,7 +2045,7 @@ struct SegmentTree {
         
         array<T, 2> tag{0, 1};
 
-        array<int, 2> ch;
+        // array<int, 2> ch;
     };
     vector<Node> seg;
     
@@ -2052,9 +2055,10 @@ struct SegmentTree {
         build(1, 1, n);
     }
 
-    // SegmentTree(int n, const vector<T> &vec, int mod) : n(n), vec(vec), mod(mod) {
-    //     seg.emplace_back();
-    //     build(1, n);
+    // SegmentTree(int n, const vector<T> &vec, int mod) : n(n), seg(2 * n), mod(mod) {
+    //     for (int i = 1; i <= n; i ++) {
+    //         add(i, i, vec[i]);
+    //     }
     // }
 
     void pushup(int cur) {
@@ -2062,21 +2066,14 @@ struct SegmentTree {
     }
 
     void build(int cur, int s, int t) {
-    // int build(int s, int t) {
-    //     seg.emplace_back();
-    //     int cur = ++ idx;
         if (s == t) {
             seg[cur].val = vec[s] % mod;
             return;
-            // return cur;
         }
         int mid = (s + t) / 2;
         build(lc, s, mid);
-        // lc = build(s, mid);
         build(rc, mid + 1, t);
-        // rc = build(mid + 1, t);
         pushup(cur);
-        // return cur;
     }
 
     void pushdown(int cur, int s, int t, int mid) {
@@ -2094,15 +2091,21 @@ struct SegmentTree {
 
     void add(int lo, int ro, T val) {
         add(1, 1, n, lo, ro, val);
+        // add(rt, 1, n, lo, ro, val);
     }
     
     void add(int cur, int s, int t, int lo, int ro, T val) {
+    // void add(int &cur, int s, int t, int lo, int ro, T val) {
+    //     if (!cur) {
+    //         cur = ++ idx;
+    //     }
         if (lo <= s && t <= ro) {
             seg[cur].val = (seg[cur].val + (t - s + 1ll) * val) % mod;
             seg[cur].tag[0] = (seg[cur].tag[0] + val) % mod;
             return; 
         }
         int mid = (s + t) / 2; 
+        // int mid = s + (t - s) / 2;
         pushdown(cur, s, t, mid);
         if (lo <= mid) {
             add(lc, s, mid, lo, ro, val);
@@ -2115,9 +2118,14 @@ struct SegmentTree {
 
     void mul(int lo, int ro, T val) {
         mul(1, 1, n, lo, ro, val);
+        // mul(rt, 1, n, lo, ro, val);
     }
     
     void mul(int cur, int s, int t, int lo, int ro, T val) {
+    // void mul(int &cur, int s, int t, int lo, int ro, T val) {
+    //     if (!cur) {
+    //         cur = ++ idx;
+    //     }
         if (lo <= s && t <= ro) {
             seg[cur].val = 1ll * seg[cur].val * val % mod;
             seg[cur].tag[0] = 1ll * seg[cur].tag[0] * val % mod;
@@ -2125,6 +2133,7 @@ struct SegmentTree {
             return; 
         }
         int mid = (s + t) / 2; 
+        // int mid = s + (t - s) / 2;
         pushdown(cur, s, t, mid);
         if (lo <= mid) {
             mul(lc, s, mid, lo, ro, val);
@@ -2140,10 +2149,14 @@ struct SegmentTree {
     }
     
     T query(int cur, int s, int t, int lo, int ro) {
+        // if (!cur) {
+        //     return 0;
+        // }
         if (lo <= s && t <= ro) {
             return seg[cur].val;
         }
         int mid = (s + t) / 2;
+        // int mid = s + (t - s) / 2;
         T sum = 0; 
         pushdown(cur, s, t, mid);
         if (lo <= mid) {
@@ -17063,9 +17076,9 @@ void solve() {
     vis[bo.first][bo.second] = 1;
     qg.emplace(gi.first, gi.second);
     vis[gi.first][gi.second] = 2;
-    while (!qb.empty() || !qg.empty()) {
+    while (ssize(qb) || ssize(qg)) {
         t ++;
-        for (int i = 0; i < 3 && !qb.empty(); i ++) {
+        for (int i = 0; i < 3 && ssize(qb); i ++) {
             int s = ssize(qb);
             while (s --) {
                 auto [r, c] = qb.front();
@@ -17124,6 +17137,191 @@ int main() {
         solve();
     }
 
+    return 0;
+}
+```
+
+<div style="page-break-after: always;"></div>
+
+# D - Ulam-Warburton Automaton
+
+
+
+Time Limit: 2 sec / Memory Limit: 1024 MiB
+
+Score : 425 points
+
+------
+
+
+
+### Problem Statement
+
+There is a grid with $H$ rows and $W$ columns. We call the cell at the $i$-th row from the top ($1 \le i \le H$) and $j$-th column from the left ($1 \le j \le W$) as cell $(i, j)$.
+
+Initially, cell $(i, j)$ is colored black if $S_{i,j}$ is `#` and white if it is `.`
+
+Perform the following operation $10^{100}$ times:
+
+- Let $T$ be the set of cells that are colored white and have exactly one adjacent cell colored black. Color each cell in $T$ black. Here, two cells $(i_1, j_1)$ and $(i_2, j_2)$ are adjacent if and only if $|i_1 - i_2| + |j_1 - j_2| = 1$.
+
+Find the number of cells that are colored black after all operations are completed.
+
+### Constraints
+
+- $2 \le H, W$
+- $HW \le 3 \times 10^5$
+- $H$ and $W$ are integers.
+- $S_{i,j}$ is `#` or `.`
+
+### Input
+
+The input is given from Standard Input in the following format:
+
+```
+H W
+S_{1,1}S_{1,2}...S_{1,W}
+S_{2,1}S_{2,2}...S_{2,W}
+...
+S_{H,1}S_{H,2}...S_{H,W}
+```
+
+### Output
+
+Output the answer.
+
+### Sample Input 1
+
+```
+9 9
+.........
+.........
+.........
+.........
+....#....
+.........
+.........
+.........
+.........
+```
+
+### Sample Output 1
+
+```
+57
+```
+
+![](C:\Users\KagaMiku39\Desktop\66c86ae7efa44c7545e6db9451921205.gif)
+
+### Sample Input 2
+
+```
+2 2
+..
+..
+```
+
+### Sample Output 2
+
+```
+0
+```
+
+### Sample Input 3
+
+```
+10 10
+..........
+....#.....
+#.......#.
+......#...
+.......#..
+.....#....
+..........
+..........
+..#...#...
+.......#..
+```
+
+### Sample Output 3
+
+```
+64
+```
+
+<div style="page-break-after: always;"></div>
+
+```c++
+#include <bits/stdc++.h>
+
+#define ssize(x) int(x.size())
+
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int h, w;
+    cin >> h >> w;
+    
+    vector<vector<int>> vis(h + 1, vector<int>(w + 1));
+    vector<vector<char>> s(h + 1, vector<char>(w + 1));
+    vector<pair<int, int>> vec;
+    for (int i = 1; i <= h; i ++) {
+        for (int j = 1; j <= w; j ++) {
+            cin >> s[i][j];
+            if (s[i][j] == '#') {
+                vec.emplace_back(i, j);
+                vis[i][j] = true;
+            }
+        }
+    }
+    
+    int off[][2]{0, 1, 1, 0, 0, -1, -1, 0};
+    auto check = [&](int r, int c) {
+        int cnt = 0;
+        for (int i = 0; i < 4; i ++) {
+            int nr = r + off[i][0], nc = c + off[i][1];
+            if (nr < 1 || nr > h || nc < 1 || nc > w) {
+                continue;
+            }
+            cnt += s[nr][nc] == '#';
+        }
+        return cnt == 1;
+    };
+    while (ssize(vec)) {
+        queue<pair<int, int>> q;
+        for (auto &[r, c]: vec) {
+            q.emplace(r, c);
+            s[r][c] = '#';
+            vis[r][c] = true;
+        }
+        vec.clear();
+        while (ssize(q)) {
+            auto [r, c] = q.front();
+            q.pop();
+            for (int i = 0; i < 4; i ++) {
+                int nr = r + off[i][0], nc = c + off[i][1];
+                if (nr < 1 || nr > h || nc < 1 || nc > w || vis[nr][nc]) {
+                    continue;
+                }
+                if (check(nr, nc)) {
+                    vec.emplace_back(nr, nc);
+                }
+            }
+        }
+    }
+
+    int ans = 0;
+    for (int i = 1; i <= h; i ++) {
+        for (int j = 1; j <= w; j ++) {
+            ans += s[i][j] == '#';
+        }
+    }
+
+    cout << ans << '\n';
+    
     return 0;
 }
 ```

@@ -49,9 +49,9 @@ void solve() {
     vis[bo.first][bo.second] = 1;
     qg.emplace(gi.first, gi.second);
     vis[gi.first][gi.second] = 2;
-    while (!qb.empty() || !qg.empty()) {
+    while (ssize(qb) || ssize(qg)) {
         t ++;
-        for (int i = 0; i < 3 && !qb.empty(); i ++) {
+        for (int i = 0; i < 3 && ssize(qb); i ++) {
             int s = ssize(qb);
             while (s --) {
                 auto [r, c] = qb.front();
