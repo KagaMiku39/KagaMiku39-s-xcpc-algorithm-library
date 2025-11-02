@@ -21,10 +21,10 @@ int main() {
         s[i] = ' ' + s[i];
     }
     
-    auto gethash = [&](string str) {
+    auto gethash = [&](string s) {
         u64 res = 0;
-        for (int i = 1; i < ssize(str); i ++) {
-            res = res * p + str[i];
+        for (int i = 1; i < ssize(s); i ++) {
+            res = res * p + s[i];
         }
         return res;
     };
