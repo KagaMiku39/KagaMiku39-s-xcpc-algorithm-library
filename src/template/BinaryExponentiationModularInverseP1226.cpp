@@ -36,6 +36,9 @@ int main() {
         }
         return res;
     };
+    // auto inv = [&](int x) {
+    //     return binpow(x, mod - 2);
+    // };
 
     cout << a << '^' << b << " mod " << mod << '=' << binpow(a, b) << '\n';
 

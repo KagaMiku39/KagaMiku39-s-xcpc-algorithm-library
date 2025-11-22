@@ -10,7 +10,7 @@ int main() {
     cin >> n >> m;
 
     vector<vector<int>> adj(n + 1);
-    for (int i = 0; i < m; i ++) {
+    for (int i = 1; i <= m; i ++) {
         int u, v;
         cin >> u >> v;
         adj[u].emplace_back(v);
@@ -18,7 +18,7 @@ int main() {
     }
     
     int ans = 0;
-    bool ok = false;
+    bool tag = false;
     vector<int> c(n + 1, -1);
     for (int i = 1; i <= n; i ++) {
         if (!~c[i]) {
@@ -39,14 +39,14 @@ int main() {
                 return false;
             };
             if (dfs(dfs, i, 1)) {
-                ok = true;
+                tag = true;
                 break;
             }
             ans += min(sum[0], sum[1]);
         }
     }
 
-    if (ok) {
+    if (tag) {
         cout << "Impossible\n";
     } else {
         cout << ans << '\n';

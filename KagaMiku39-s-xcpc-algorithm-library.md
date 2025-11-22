@@ -9505,6 +9505,9 @@ int main() {
         }
         return res;
     };
+    // auto inv = [&](int x) {
+    //     return binpow(x, mod - 2);
+    // };
 
     cout << a << '^' << b << " mod " << mod << '=' << binpow(a, b) << '\n';
 
@@ -10021,6 +10024,129 @@ int main() {
 
     cout << (b1 % a1 + a1) % a1 << "\n";
     
+    return 0;
+}
+```
+
+<div style="page-break-after: always;"></div>
+
+# CF2072F Goodbye, Banker Life
+
+## 题目描述
+
+怪物正在逼近城市，为了保护它，Akito 必须在城市周围创建一个防护场。众所周知，防护场有不同的等级。Akito 选择了等级为 $n$ 的防护场。为了构建这个防护场，需要一个特殊咒语，即伟大魔法三角（表示为二维数组 $T$）的第 $n$ 行。我们将这个数组称为 $T$。
+
+魔法三角的定义如下：
+
+- 第 $i$ 行包含 $i$ 个整数。
+- 第一行唯一的整数是 $k$。
+- 设第 $i$ 行第 $j$ 个元素为 $T_{i,j}$，则：
+
+$$
+T_{i,j} = \begin{cases} 
+T_{i-1,j-1} \oplus T_{i-1,j}, & \text{if } 1 < j < i \\ 
+T_{i-1,j}, & \text{if } j = 1 \\ 
+T_{i-1,j-1}, & \text{if } j = i 
+\end{cases}
+$$
+
+其中 $a \oplus b$ 表示整数 $a$ 和 $b$ 的按位异或运算。
+
+请帮助 Akito 在怪物抵达城市前找到这个无限魔法三角的第 $n$ 行整数。
+
+## 输入格式
+
+第一行包含整数 $t$（$1 \le t \le 10^4$）——测试用例的数量。
+
+每个测试用例的唯一一行包含两个整数 $n$ 和 $k$（$1 \le n \le 10^6$，$1 \le k < 2^{31}$）——分别表示 Akito 需要的行索引和伟大魔法三角第一行的整数。
+
+保证所有测试用例的 $n$ 之和不超过 $10^6$。
+
+## 输出格式
+
+对于每个测试用例，输出 $n$ 个整数——伟大魔法三角第 $n$ 行的元素。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+5
+1 5
+2 10
+3 16
+9 1
+1 52
+```
+
+### 输出 #1
+
+```
+5
+10 10
+16 0 16
+1 0 0 0 0 0 0 0 1
+52
+```
+
+## 说明/提示
+
+在第一个示例中，根据定义，伟大魔法三角的第一行为 $[5]$。
+
+在第二个示例中，$T_{2,1} = T_{1,1} = 10$ 且 $T_{2,2} = T_{1,1} = 10$。
+
+翻译由 DeepSeek R1 完成
+
+<div style="page-break-after: always;"></div>
+
+```c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+constexpr int mod = 2, maxn = 1e6 + 1;
+
+int v2[maxn];
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    
+    for (int i = 0; i < n; i ++) {
+        // cout << (((n - 1) & i) == i ? k : 0) << " \n"[i == n - 1];
+        cout << (v2[n - 1] - v2[i] - v2[n - 1 - i] ? 0 : k) << " \n"[i == n - 1];
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+
+    for (int i = 0; i < maxn; i ++) {
+        int j = 2;
+        while (i / j) {
+            v2[i] += i / j;
+            j *= 2;
+        }
+        // v2[i] = i - bitset<27>{u32(i)}.count();
+    }
+
+    // for (int i = 1; i < maxn; i ++) {
+    //     v2[i] = v2[i - 1]; 
+    //     int j = i;
+    //     while (j && j % 2 == 0) {
+    //         v2[i] ++;
+    //         j /= 2;
+    //     }
+    // }
+
+    while (t --) {
+        solve();
+    }
+
     return 0;
 }
 ```
@@ -12391,6 +12517,184 @@ int main() {
         solve();
     }
     
+    return 0;
+}
+```
+
+<div style="page-break-after: always;"></div>
+
+# CF2074E Empty Triangle
+
+## 题目描述
+
+这是一道交互题。
+
+粉色士兵们向你隐藏了 $n$ 个（$3 \le n \le 1500$）固定点 $(x_1, y_1), (x_2, y_2), \ldots, (x_n, y_n)$，其坐标未给出。已知任意两点坐标不同，且任意三点不[共线](https://en.wikipedia.org/wiki/Collinearity)。
+
+你可以向主持人（Frontman）询问三个不同的下标 $i$、$j$、$k$。随后，主持人会绘制由点 $(x_i, y_i)$、$(x_j, y_j)$、$(x_k, y_k)$ 构成的三角形，并按以下规则回应：
+
+- 若至少有一个隐藏点位于三角形内部，主持人会返回其中一个这样的点的下标。注意，若有多个这样的点，主持人可以任意选择其中一个返回。
+- 否则，主持人返回 $0$。
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2074E/e516ed9e8799abe3210fe85d082a2aa0f40e533f.png)  
+你的目标是找到一个不包含其他隐藏点的三角形（如图中蓝色三角形所示）。你最多可以使用 $\mathbf{75}$ 次询问，找到由三个点构成的、内部不含其他隐藏点的任意三角形。
+
+注意：主持人可能在选择返回的点时具有自适应性。换言之，返回点的选择可能受到多种因素影响（包括但不限于点的排列和之前的询问）。但需注意，点的序列永远不会被改变。
+
+本题禁用 hack。你的解法将在恰好 $\mathbf{35}$ 个输入文件（包括示例输入）上进行评测。
+
+## 输入格式
+
+无
+
+## 输出格式
+
+每个测试包含多个测试用例。第一行包含测试用例的数量 $t$（$1 \le t \le 20$）。接下来是每个测试用例的描述。
+
+每个测试用例的第一行包含一个正整数 $n$ —— 点的数量（$3 \le n \le 1500$）。
+
+之后，你可以在单独一行输出以下内容进行询问：
+
+- "? i j k"（$1 \le i,j,k \le n$，$i \ne j$，$i \ne k$，$j \ne k$）：询问由 $(x_i, y_i)$、$(x_j, y_j)$、$(x_k, y_k)$ 构成的三角形。
+
+随后，交互器会在新的一行返回一个整数：
+
+- 若你的询问无效或询问次数超过 $\mathbf{75}$ 次，交互器返回 $-1$；
+- 若存在下标 $p$（$1 \le p \le n$）使得点 $(x_p, y_p)$ 位于三角形内部，则返回任意一个这样的下标 $p$；
+- 否则，交互器返回 $0$。
+
+若你想提交答案，可以在单独一行输出以下内容：
+
+- "! i j k"（$1 \le i,j,k \le n$，$i \ne j$，$i \ne k$，$j \ne k$）：表示由 $(x_i, y_i)$、$(x_j, y_j)$、$(x_k, y_k)$ 构成的三角形内部不含其他隐藏点。
+
+随后，以下交互会发生：
+
+- 若答案无效或三角形包含其他隐藏点，交互器返回 $-1$；
+- 若答案正确且仍有未处理的测试用例，你将获得下一个测试用例的 $n$ 值；
+- 否则，表示所有测试用例已正确解决，你的程序可正常终止。
+
+注意：提交答案不计入询问次数。
+
+注意：交互器可能在选择返回的点时具有自适应性。换言之，返回点的选择可能受到多种因素影响（包括但不限于点的排列和之前的询问）。但需注意，点的序列永远不会被改变。
+
+每次输出询问后，请勿忘记换行并刷新$^{\text{∗}}$输出缓冲区。否则，你将收到 Idleness limit exceeded 的判定结果。
+
+若在交互过程中读取到 $-1$ 而非有效数据，你的程序必须立即终止。这意味着你的程序将因无效询问或其他错误被判定为 Wrong answer。未能终止可能导致任意判定结果，因为程序会继续从已关闭的流中读取数据。
+
+Hacks
+
+本题禁用 hack。你的解法将在恰好 $\mathbf{35}$ 个输入文件（包括示例输入）上进行评测。
+
+$^{\text{∗}}$ 刷新缓冲区的方法：
+
+- C++ 使用 `fflush(stdout)` 或 `cout.flush()`；
+- Python 使用 `sys.stdout.flush()`；
+- 其他语言请参考文档。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+2
+6
+
+5
+
+4
+
+0
+
+3
+```
+
+### 输出 #1
+
+```
+? 1 2 3
+
+? 1 5 3
+
+? 2 5 6
+
+! 2 5 6
+
+! 1 2 3
+```
+
+## 说明/提示
+
+第一个测试用例中的点为 $(3,0),(0,3),(5,2),(3,1),(2,2),(4,4)$。
+
+三次询问对应的三角形如下：
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2074E/e516ed9e8799abe3210fe85d082a2aa0f40e533f.png)  
+
+可以看到，由 $(0,3)$、$(2,2)$、$(4,4)$ 构成的三角形内部不含其他隐藏点，因此是一个有效答案。
+
+注意：交互示例仅展示合法的交互流程，不一定是实际响应。例如，当查询 "? 1 2 3" 时，主持人可能返回 $4$。但由于主持人不会改变点的序列，因此不会对同一查询返回 $6$。
+
+第二个测试用例中仅有 $3$ 个点。因此，由这三点构成的唯一三角形内部不含其他隐藏点。
+
+翻译由 DeepSeek R1 完成
+
+<div style="page-break-after: always;"></div>
+
+```c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+mt19937_64 rnd(chrono::steady_clock::now().time_since_epoch().count());
+
+void solve() {
+    int n;
+    cin >> n;
+
+    vector<int> id(n);
+
+    iota(begin(id), end(id), 1);
+
+    shuffle(begin(id), end(id), rnd);
+    
+    vector<int> que(begin(id), next(begin(id), 3));
+
+    int res = que.front();
+    auto foo = [&]() {
+        for (int &i: que) {
+            if (i == que.back()) {
+                cout << i << endl;
+            } else {
+                cout << i << ' ';
+            }
+        }
+    };
+    while (1) {
+        cout << "? ";
+        foo();
+        cin >> res;
+        if (res) {
+            que[rnd() % 3] = res;
+        } else {
+            break;
+        }
+    }
+
+    cout << "! ";
+    foo();
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+
+    while (t --) {
+        solve();
+    }
+
     return 0;
 }
 ```
@@ -20526,7 +20830,7 @@ int main() {
     cin >> n >> m;
 
     vector<vector<int>> adj(n + 1);
-    for (int i = 0; i < m; i ++) {
+    for (int i = 1; i <= m; i ++) {
         int u, v;
         cin >> u >> v;
         adj[u].emplace_back(v);
@@ -20534,7 +20838,7 @@ int main() {
     }
     
     int ans = 0;
-    bool ok = false;
+    bool tag = false;
     vector<int> c(n + 1, -1);
     for (int i = 1; i <= n; i ++) {
         if (!~c[i]) {
@@ -20547,21 +20851,22 @@ int main() {
                         if (self(self, v, col ^ 1)) {
                             return true;
                         }
-                    } else if (c[v] == col) {
+                    }
+                    if (c[v] == col) {
                         return true;
                     }
                 }
                 return false;
             };
             if (dfs(dfs, i, 1)) {
-                ok = true;
+                tag = true;
                 break;
             }
             ans += min(sum[0], sum[1]);
         }
     }
 
-    if (ok) {
+    if (tag) {
         cout << "Impossible\n";
     } else {
         cout << ans << '\n';
