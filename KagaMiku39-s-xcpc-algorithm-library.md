@@ -38,7 +38,6 @@ $$ \def\arraystretch{1.2}
 \verb! 1   3  -1  -3   5  [3   6   7]! & 3 & 7 \\ \hline
 \end{array}
 $$
-
 ## 输入格式
 
 输入一共有两行，第一行有两个正整数 $n,k$；\
@@ -10029,42 +10028,36 @@ int main() {
 ```
 
 <div style="page-break-after: always;"></div>
-
 # CF2072F Goodbye, Banker Life
 
 ## 题目描述
 
-怪物正在逼近城市，为了保护它，Akito 必须在城市周围创建一个防护场。众所周知，防护场有不同的等级。Akito 选择了等级为 $n$ 的防护场。为了构建这个防护场，需要一个特殊咒语，即伟大魔法三角（表示为二维数组 $T$）的第 $n$ 行。我们将这个数组称为 $T$。
+Monsters are approaching the city, and to protect it, Akito must create a protective field around the city. As everyone knows, protective fields come in various levels. Akito has chosen the field of level $ n $ . To construct the field, a special phrase is required, which is the $ n $ -th row of the Great Magical Triangle, represented as a two-dimensional array. We will call this array $ T $ .
 
-魔法三角的定义如下：
+The triangle is defined as follows:
 
-- 第 $i$ 行包含 $i$ 个整数。
-- 第一行唯一的整数是 $k$。
-- 设第 $i$ 行第 $j$ 个元素为 $T_{i,j}$，则：
+- In the $ i $ -th row, there are $ i $ integers.
+- The single integer in the first row is $ k $ .
+- Let the $j$ -th element of the $i$ -th row be denoted as $ T_{i,j} $ . 
+- Then, the element $T_{i,j}$ is defined as follows:
 
-$$
-T_{i,j} = \begin{cases} 
-T_{i-1,j-1} \oplus T_{i-1,j}, & \text{if } 1 < j < i \\ 
-T_{i-1,j}, & \text{if } j = 1 \\ 
-T_{i-1,j-1}, & \text{if } j = i 
-\end{cases}
-$$
+  $$ T_{i,j} = \begin{cases}  T_{i-1,j-1} \oplus T_{i-1,j}, & \text{if } 1 < j < i \\ T_{i-1,j}, & \text{if } j = 1 \\ T_{i-1,j-1}, & \text{if } j = i  \end{cases} $$
 
-其中 $a \oplus b$ 表示整数 $a$ 和 $b$ 的按位异或运算。
+  Where $a \oplus b$ is the bitwise [exclusive "OR" (XOR)](https://en.wikipedia.org/wiki/Bitwise_operation#XOR) of the integers $a$ and $b$.
 
-请帮助 Akito 在怪物抵达城市前找到这个无限魔法三角的第 $n$ 行整数。
+  Help Akito find the integers in the $n$-th row of the infinite triangle before the monsters reach the city.
 
 ## 输入格式
 
-第一行包含整数 $t$（$1 \le t \le 10^4$）——测试用例的数量。
+The first line contains the integer $t$ ( $1 \le t \le 10^4$ ) — the number of test cases.
 
-每个测试用例的唯一一行包含两个整数 $n$ 和 $k$（$1 \le n \le 10^6$，$1 \le k < 2^{31}$）——分别表示 Akito 需要的行索引和伟大魔法三角第一行的整数。
+In the only line of each test case, there are two integers $n$ and $k$ ( $ 1 \le n \le 10^6,\ 1 \le k < 2^{31} $ ) — the row index that Akito needs and the integer in the first row of the Great Magical Triangle, respectively.
 
-保证所有测试用例的 $n$ 之和不超过 $10^6$。
+It is guaranteed that the sum of $n$ across all test cases does not exceed $10^6$ .
 
 ## 输出格式
 
-对于每个测试用例，输出 $n$ 个整数——伟大魔法三角第 $n$ 行的元素。
+For each test case, output $ n $ integers — the elements of the $ n $ -th row of the Great Magical Triangle.
 
 ## 输入输出样例 #1
 
@@ -10091,12 +10084,9 @@ $$
 
 ## 说明/提示
 
-在第一个示例中，根据定义，伟大魔法三角的第一行为 $[5]$。
+In the first example, the first row of the Great Magical Triangle is $ [5] $ by definition.
 
-在第二个示例中，$T_{2,1} = T_{1,1} = 10$ 且 $T_{2,2} = T_{1,1} = 10$。
-
-翻译由 DeepSeek R1 完成
-
+In the second example, $ T_{2,1} = T_{1,1} = 10 $ and $ T_{2,2} = T_{1, 1} = 10 $ .
 <div style="page-break-after: always;"></div>
 
 ```c++
@@ -12909,6 +12899,112 @@ int main() {
 
 <div style="page-break-after: always;"></div>
 
+# CF2033F Kosuke's Sloth
+
+## 题目描述
+
+Kosuke is too lazy. He will not give you any legend, just the task:
+
+Fibonacci numbers are defined as follows:
+
+- $ f(1)=f(2)=1 $ .
+- $ f(n)=f(n-1)+f(n-2) $ $ (3\le n) $
+
+ We denote $ G(n,k) $ as an index of the $ n $ -th Fibonacci number that is divisible by $ k $ . For given $ n $ and $ k $ , compute $ G(n,k) $ .As this number can be too big, output it by modulo $ 10^9+7 $ .
+
+For example: $ G(3,2)=9 $ because the $ 3 $ -rd Fibonacci number that is divisible by $ 2 $ is $ 34 $ . $ [1,1,\textbf{2},3,5,\textbf{8},13,21,\textbf{34}] $ .
+
+## 输入格式
+
+The first line of the input data contains a single integer $ t $ ( $ 1 \le t \le 10^4 $ ) — the number of test cases.
+
+The first and only line contains two integers $ n $ and $ k $ ( $ 1 \le n \le 10^{18} $ , $ 1 \le k \le 10^5 $ ).
+
+It is guaranteed that the sum of $ k $ across all test cases does not exceed $ 10^6 $ .
+
+## 输出格式
+
+For each test case, output the only number: the value $ G(n,k) $ taken by modulo $ 10^9+7 $ .
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+3
+3 2
+100 1
+1000000000000 1377
+```
+
+### 输出 #1
+
+```
+9
+100
+999244007
+```
+
+<div style="page-break-after: always;"></div>
+
+```c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+using i64 = long long;
+
+constexpr int mod = 1e9 + 7;
+
+void solve() {   
+    i64 n;
+    cin >> n;
+
+    n %= mod;
+
+    int k;
+    cin >> k;
+
+    if (k == 1) {
+        cout << n << '\n'; 
+        return;
+    }
+    
+    int pos = 0;
+    vector<int> f(6 * k + 1);
+    f[1] = 1 % k;
+    f[2] = 1 % k;
+    for (int i = 3; i <= 6 * k; i ++) {
+        f[i] = (f[i - 1] + f[i - 2]) % k;
+        if (!f[i]) {
+            if (pos) {
+                cout << (pos + (i - pos) * (n - 1) % mod) % mod << '\n';
+                return; 
+            } else {
+                pos = i;
+            }      
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+
+
+    while (t --) {
+        solve();
+    }
+
+    return 0;
+}
+```
+
+<div style="page-break-after: always;"></div>
+
 # P1595 信封问题
 
 ## 题目描述
@@ -13811,7 +13907,134 @@ int main() {
 }
 ```
 
+<div style="page-break-after: always;"></div>
 
+# CF2152B Catching the Krug
+
+## 题目描述
+
+Doran 和 Krug 正在一个由 $(n + 1) \times (n + 1)$ 个格子组成的网格上玩游戏，网格上的每个单元格坐标是从 $0$ 到 $n$（包含 $0$ 和 $n$）的整数对。Krug 的目标是尽可能长时间不被 Doran 抓住，而 Doran 的目标是尽快抓住 Krug。当 Doran 和 Krug 站在同一个格子上时，称 Doran 抓住了 Krug。
+
+游戏规则如下，Krug 和 Doran 轮流行动，Krug 先手：
+
+- Krug 可以选择留在原地，或者移动到上下左右相邻的格子（不可斜向移动）。具体而言，如果 Krug 当前在 $(a, b)$，她可以留在 $(a, b)$，或移动到 $(a-1, b), (a, b-1), (a, b+1), (a+1, b)$。
+- Doran 可以选择留在原地，或者移动到上下左右或斜向相邻的格子。具体而言，如果 Doran 当前在 $(c, d)$，他可以留在 $(c, d)$，或移动到 $(c-1, d-1), (c-1, d), (c-1, d+1), (c, d-1), (c, d+1), (c+1, d-1), (c+1, d), (c+1, d+1)$。
+- 两名玩家都不能走出网格。
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2152B/6140c6030c33727f84ce9811f3c29f0f0fb6066c20670a54d49df8414eca0caa.png)
+
+如上图，分别展示了 Krug 和 Doran 的可行动位置。字母 'K' 和 'D' 分别代表 Krug 和 Doran 的当前位置，色块表示在各自回合可能到达的位置。
+
+Krug 的存活时间定义为在双方的最优策略下，从初始位置开始直到 Doran 抓住 Krug 之前，经历了多少次 Doran 的回合。如果 Krug 可以无限存活，则输出 $-1$。
+
+## 输入格式
+
+每个测试包含多个测试用例。第一行输入测试用例数量 $t$，$(1 \le t \le 10^4)$。接下来 $t$ 行，每行输入五个整数 $n$, $r_K$, $c_K$, $r_D$, $c_D$，$(1 \le n \le 10^9, 0 \le r_K, c_K, r_D, c_D \le n, (r_K, c_K) \ne (r_D, c_D))$，其中 $n$ 表示网格的大小，$(r_K, c_K)$ 表示 Krug 的起始格子，$(r_D, c_D)$ 表示 Doran 的起始格子。
+
+## 输出格式
+
+对于每个测试用例，当双方都采取最优策略时，输出 Krug 的存活时间。如果 Krug 可以无限存活，输出 $-1$。
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+7
+2 0 0 1 1
+3 1 1 0 1
+1 1 0 0 1
+6 1 3 3 2
+9 4 1 4 2
+82 64 2 63 2
+1000000000 500000000 500000000 1000000000 0
+```
+
+### 输出 #1
+
+```
+1
+3
+1
+4
+2
+19
+1000000000
+```
+
+## 说明/提示
+
+第一个样例说明：
+
+Krug 初始在 $(0,0)$，Doran 初始在 $(1,1)$。Krug 回合可移动到 $(0,0)$、$(0,1)$ 或 $(1,0)$。
+
+Doran 从 $(1,1)$ 出发，在 $3 \times 3$ 网格范围内任意移动一次即可到达任意格子，因此无论 Krug 如何走，Doran 都能在他第一次回合就抓到 Krug。Krug 的存活时间为 $1$。
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2152B/c7d7561b4ce22044ffa439efef8a1eddeb938ecf9c0d1b387e48abb97b325394.png)
+
+第二个样例说明：
+
+Krug 初始在 $(1,1)$，Doran 在 $(0,1)$。为了在 Doran 的第一次回合幸存，Krug 必须走到 Doran 无法一步到达的位置，即 $(2,1)$。
+
+Krug 走到 $(2,1)$ 后，Doran 向 $(1,1)$ 靠近。
+
+接下来第二回合 Krug 又要走到 Doran 无法一步到达的位置，也就是 $(3,1)$，Doran 接着到 $(2,1)$。
+
+此时第三回合 Krug 无论如何移动，Doran 下回合都能追上她。最优策略下 Krug 的存活时间为 $3$。
+
+![](https://cdn.luogu.com.cn/upload/vjudge_pic/CF2152B/81a8ac5de89c1c197384a98e98a288cebbdfe601051317acac9cb6cbbbff4c3d.png)
+
+由 ChatGPT 5 翻译
+
+<div style="page-break-after: always;"></div>
+
+```c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+template<typename T>
+bool cmax(T &a, const T &b) {
+    return a < b ? a = b, true : false;
+}
+
+void solve() {   
+    int n;
+    cin >> n;
+
+    int rk, ck, rd, cd;
+    cin >> rk >> ck >> rd >> cd;
+
+    int ans = 0;
+    if (rd > rk) {
+        cmax(ans, rd);
+    } else if (rk != rd) {
+        cmax(ans, n - rd);
+    }
+
+    if (cd > ck) {
+        cmax(ans, cd);
+    } else if (ck != cd) {
+        cmax(ans, n - cd);
+    }
+
+    cout << ans << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+
+    while (t --) {
+        solve();
+    }
+
+    return 0;
+}
+```
 
 <div style="page-break-after: always;"></div>
 
@@ -14517,6 +14740,133 @@ int main() {
 }
 ```
 
+<div style="page-break-after: always;"></div>
+
+# CF2122C Manhattan Pairs
+
+## 题目描述
+
+You are given $ n $ points $ (x_i, y_i) $ on a 2D plane, where $ n $ is even. Select $ \tfrac{n}{2} $ disjoint pairs $ (a_i, b_i) $ to maximize the sum of Manhattan distances between points in pairs. In other words, maximize 
+$$ \sum_{i=1}^{\frac n2} |x_{a_i} - x_{b_i}| + |y_{a_i} - y_{b_i}|.  $$
+
+## 输入格式
+
+Each test contains multiple test cases. The first line contains the number of test cases $ t $ ( $ 1 \le t \le 10^4 $ ). The description of the test cases follows.
+
+The first line of each test case contains a single even integer $ n $ ( $ 2 \leq n \leq 2 \cdot 10^5 $ ) — the number of points.
+
+The $ i $ -th of the next $ n $ lines contains two integers $ x_i $ and $ y_i $ ( $ -10^6 \le x_i, y_i \le 10^6 $ ) — the coordinates of the $ i $ -th point.
+
+It is guaranteed that the sum of $ n $ over all test cases does not exceed $ 2 \cdot 10^5 $ .
+
+## 输出格式
+
+For each test case, output $ \tfrac{n}{2} $ lines, the $ i $ -th line containing two integers $ a_i $ and $ b_i $ — the indices of points in the $ i $ -th pair.
+
+If there are multiple solutions, print any of them.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+2
+4
+1 1
+3 0
+4 2
+3 4
+10
+-1 -1
+-1 2
+-2 -2
+-2 0
+0 2
+2 -3
+-4 -4
+-4 -2
+0 1
+-4 -2
+```
+
+### 输出 #1
+
+```
+4 1
+2 3
+8 1
+9 10
+7 5
+2 3
+6 4
+```
+
+## 说明/提示
+
+In the first test case, an optimal solution is to select the pairs $ (1, 4) $ and $ (2, 3) $ , which achieves a distance sum of $ 5 + 3 = 8 $ .
+
+In the second test case, an optimal solution is to select the pairs $ (1, 8) $ , $ (9, 10) $ , $ (5, 7) $ , $ (2, 3) $ , $ (4, 6) $ , which achieves a distance sum of $ 4 + 7 + 10 + 5 + 7 = 33 $ .
+
+<div style="page-break-after: always;"></div>
+
+```c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+void solve() {   
+    int n;
+    cin >> n;
+
+    vector<int> x(n + 1), y(n + 1);
+    for (int i = 1; i <= n; i ++) {
+        cin >> x[i] >> y[i];
+    }
+
+    vector<int> id(n + 1);
+
+    iota(begin(id), end(id), 0);
+
+    sort(next(begin(id)), end(id), [&](const int &a, const int &b) {
+        return x[a] < x[b];
+    });
+
+    sort(next(begin(id)), next(begin(id), n / 2 + 1), [&](const int &a, const int &b) {
+        return y[a] < y[b];
+    });
+
+    sort(next(begin(id), n / 2 + 1), end(id), [&](const int &a, const int &b) {
+        return y[a] < y[b];
+    });
+
+    for (int i = 1; i <= n / 2; i ++) {
+        int j = id[i], k = id[n - i + 1];
+        cout << j << ' ' << k << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+
+    while (t --) {
+        solve();
+    }
+
+    return 0;
+}
+```
+
+<div style="page-break-after: always;"></div>
+
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;">
+  <div style="font-size: 4rem; font-weight: 900; color: #E2D0E0; margin: 0; padding: 0;">
+    字符串
+  </div>
+</div>
 <div style="page-break-after: always;"></div>
 
 # P3375 【模板】KMP
