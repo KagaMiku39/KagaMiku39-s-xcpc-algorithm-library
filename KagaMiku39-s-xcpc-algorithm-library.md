@@ -1688,7 +1688,7 @@ struct DisjointSetUnion {
     }
 
     void merge(int a, int b) {
-        p[find(a)] = b;
+        p[find(a)] = find(b);
     }
 };
 
@@ -7970,8 +7970,7 @@ struct DisjointSetUnion {
     }
 
     void merge(int a, int b) {
-        p[find(a)] = b;
-        // p[find(a)] = find(b);
+        p[find(a)] = find(b);
     }
     
     // void merge(int a, int b) {
@@ -10993,8 +10992,6 @@ int main() {
 }
 ```
 
-
-
 <div style="page-break-after: always;"></div>
 
 # P2261 [CQOI2007] 余数求和
@@ -12080,6 +12077,113 @@ int main() {
         cout << mat;
     } else {
         cout << "No Solution\n";
+    }
+
+    return 0;
+}
+```
+
+<div style="page-break-after: always;"></div>
+
+# CF2043D Problem about GCD
+
+## 题目描述
+
+Given three integers $ l $ , $ r $ , and $ G $ , find two integers $ A $ and $ B $ ( $ l \le A \le B \le r $ ) such that their greatest common divisor (GCD) equals $ G $ and the distance $ |A - B| $ is maximized.
+
+If there are multiple such pairs, choose the one where $ A $ is minimized. If no such pairs exist, output "-1 -1".
+
+## 输入格式
+
+The first line contains a single integer $ t $ ( $ 1 \le t \le 10^3 $ ) — the number of test cases. Then, $ t $ test cases follow.
+
+Each test case consists of a single line containing three integers $ l, r, G $ ( $ 1 \le l \le r \le 10^{18} $ ; $ 1 \le G \le 10^{18} $ ) — the range boundaries and the required GCD.
+
+## 输出格式
+
+For each test case, output two integers $ A $ and $ B $ — the solution to the problem, or "-1 -1" if no such pair exists.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+4
+4 8 2
+4 8 3
+4 8 4
+5 7 6
+```
+
+### 输出 #1
+
+```
+4 6
+-1 -1
+4 8
+6 6
+```
+
+<div style="page-break-after: always;"></div>
+
+```c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+using i64 = long long;
+
+template<typename T>
+bool cmin(T &a, const T &b) {
+    return a > b ? a = b, true : false;
+}
+
+void solve() {   
+    i64 l, r, g;
+    cin >> l >> r >> g;
+
+    l = (l + g - 1) / g;
+    r /= g;
+
+    if (l > r || (l == r && l != 1)) {
+        cout << "-1 -1\n";
+        return;
+    }
+
+    i64 mx = 0, lo = LLONG_MAX, ro = 0;
+    for (int i = 0; i <= 40 && l + i <= r; i ++) {
+        for (int j = 0; j <= 40 && r - j >= l + i; j ++) {
+            if (gcd(l + i, r - j) == 1) {
+                i64 len = r - j - l - i + 1;
+                if (len >= mx) {
+                    if (len > mx) {
+                        mx = len;
+                        lo = l + i;
+                        ro = r - j;
+                    } else if (cmin(lo, l + i)) {
+                        mx = len;
+                        ro = r - j;
+                    }
+                }
+            }
+        }
+    }
+
+    lo *= g;
+    ro *= g;
+    
+    cout << lo << ' ' << ro << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+
+    while (t --) {
+        solve();
     }
 
     return 0;
@@ -23295,3 +23399,4 @@ int main() {
 
 <div style="page-break-after: always;"></div>
 
+d

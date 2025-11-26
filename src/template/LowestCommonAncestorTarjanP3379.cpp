@@ -17,7 +17,7 @@ struct DisjointSetUnion {
     }
 
     void merge(int a, int b) {
-        p[find(a)] = b;
+        p[find(a)] = find(b);
     }
 };
 
