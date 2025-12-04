@@ -3,9 +3,7 @@
 using namespace std;
 
 using u32 = unsigned;
-using i64 = long long;
 using u64 = unsigned long long; 
-using i128 = __int128; 
 
 template<typename T>
 constexpr T power(T a, u64 b) {
@@ -36,6 +34,8 @@ struct ModIntBase {
 public:
     constexpr ModIntBase() : x {0} {}
      
+    constexpr ModIntBase(bool x_) : x {x_ ? 1 : 0} {}
+    
     template<typename T>
     requires std::integral<T>
     constexpr ModIntBase(T x_) : x {norm(x_ % T {P})} {}
@@ -106,6 +106,14 @@ public:
     friend constexpr std::ostream &operator<<(std::ostream &os, const ModIntBase &a) {
         return os << a.val();
     }
+
+    friend std::istream &operator>>(std::istream &is, ModIntBase &a) {
+        using T = std::conditional_t<std::is_same_v<U, u32>, i64, u64>;
+        T v;
+        is >> v;
+        a = ModIntBase(v);
+        return is;
+    }
      
     friend constexpr bool operator==(ModIntBase lhs, ModIntBase rhs) {
         return lhs.val() == rhs.val();
@@ -118,7 +126,32 @@ public:
     friend constexpr bool operator<(ModIntBase lhs, ModIntBase rhs) {
         return lhs.val() < rhs.val();
     }
-     
+
+    friend constexpr bool operator>(ModIntBase lhs, ModIntBase rhs) {
+        return lhs.val() > rhs.val();
+    }
+
+    friend constexpr bool operator<=(ModIntBase lhs, ModIntBase rhs) {
+        return lhs.val() <= rhs.val();
+    }
+
+    friend constexpr bool operator>=(ModIntBase lhs, ModIntBase rhs) {
+        return lhs.val() >= rhs.val();
+    }
+
+    constexpr operator int() const {
+        return val();
+    }
+
+    constexpr operator bool() const { 
+        return bool(val());
+    }
+    
+    template <typename T>
+    constexpr T operator%(T m) const {
+        return val() % m;
+    }
+
 private:
     U x;
 };
@@ -129,7 +162,7 @@ using ModInt = ModIntBase<u32, P>;
 template<u64 P>
 using ModInt64 = ModIntBase<u64, P>;
  
-constexpr u32 P = 998244353;
+constexpr u32 P = 1e9 + 7;
 using Z = ModInt<P>;
 
 int main() {

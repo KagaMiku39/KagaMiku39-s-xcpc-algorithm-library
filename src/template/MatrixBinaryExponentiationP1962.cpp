@@ -4,25 +4,34 @@ using namespace std;
 
 using i64 = long long;
 
+template<typename T>
 struct Matrix {
     static constexpr int mod = 1e9 + 7;
     
-    int mat[2][2]{};
+    T mat[2][2]{};
     
-    Matrix operator * (Matrix mat) const {
+    Matrix() {}
+
+    Matrix(T a, T b, T c = T{}, T d = T{}) : mat{a, b, c, d} {}
+    
+    Matrix operator * (const Matrix &b) const {
         Matrix res;
         for (int i = 0; i < 2; i ++)
             for (int k = 0; k < 2; k ++) {
-                int tmp = this -> mat[i][k];
+                T tmp = mat[i][k];
                 for (int j = 0; j < 2; j ++) {
-                    res.mat[i][j] = (res.mat[i][j] + 1ll * tmp * mat.mat[k][j]) % mod;
+                    if constexpr (is_integral_v<T>) {
+                        res.mat[i][j] = (res.mat[i][j] + 1ll * tmp * b.mat[k][j]) % mod;
+                    } else {
+                        res.mat[i][j] += tmp * b.mat[k][j];
+                    }
                 }
             }
         return res;
     }
 
-    Matrix &operator *= (Matrix mat) {
-        return *this = *this * mat; 
+    Matrix &operator *= (const Matrix &b) {
+        return *this = *this * b; 
     }
 
     static Matrix binpow(Matrix a, i64 b) {
@@ -50,7 +59,7 @@ int main() {
         return 0;
     }
     
-    cout << (Matrix{1, 1, 0, 0} * Matrix::binpow(Matrix{0, 1, 1, 1}, n - 2)).mat[0][1] << '\n';
+    cout << (Matrix{1, 1, 0, 0} * Matrix<int>::binpow(Matrix{0, 1, 1, 1}, n - 2)).mat[0][1] << '\n';
 
     return 0;
 }

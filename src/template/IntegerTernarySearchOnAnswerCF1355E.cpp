@@ -33,11 +33,13 @@ int main() {
         return mi * m + (mx - mi) * (sum[0] <= sum[1] ? r : a);
     };
     while (lo + 3 < ro) {
-        int l = lo + (ro - lo) / 3, r = ro - (ro - lo) / 3;
-        if (pred(l) < pred(r)) {
-            ro = r;
+        // int ml = lo + (ro - lo) / 3, mr = ro - (ro - lo) / 3;
+        // int ml = (2ll * lo + ro) / 3, mr = (2ll * ro + lo) / 3;
+        int ml = lo + (ro - lo + 1) / 3, mr = ro - (ro - lo + 1) / 3;
+        if (pred(ml) < pred(mr)) {
+            ro = mr;
         } else {
-            lo = l;
+            lo = ml;
         }
     }
 
