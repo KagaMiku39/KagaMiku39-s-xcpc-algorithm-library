@@ -20,6 +20,9 @@ struct Matrix {
             for (int k = 0; k < 2; k ++) {
                 T tmp = mat[i][k];
                 for (int j = 0; j < 2; j ++) {
+                    if (!tmp) {
+                        continue;
+                    }
                     if constexpr (is_integral_v<T>) {
                         res.mat[i][j] = (res.mat[i][j] + 1ll * tmp * b.mat[k][j]) % mod;
                     } else {

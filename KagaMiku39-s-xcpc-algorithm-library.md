@@ -83,33 +83,23 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    vector<int> a(n + 1);
+    priority_queue<int> le;
+    priority_queue<int, vector<int>, greater<int>> gr;
     for (int i = 1; i <= n; i ++) {
-        cin >> a[i];
-    }
-
-    deque<int> dq[2];
-    vector<vector<int>> ans(2, vector<int>(n + 1));
-    for (int i = 1; i <= n; i ++) {
-        for (int j = 0; j < 2; j ++) {
-            if (ssize(dq[j]) && dq[j].front() + k - 1 < i) {
-                dq[j].pop_front();
-            }
-            int l = j ? -1 : 1;
-            while (ssize(dq[j]) && a[dq[j].back()] * l >= a[i] * l) {
-                dq[j].pop_back();
-            }
-            dq[j].emplace_back(i);
-            ans[j][i] = a[dq[j].front()];
+        int x;
+        cin >> x;
+        le.emplace(x);
+        gr.emplace(le.top());
+        le.pop();
+        if (ssize(gr) > ssize(le)) {
+            le.emplace(gr.top());
+            gr.pop();
         }
-    }
-
-    for (int i = 0; i < 2; i ++) {
-        for (int j = k; j <= n; j ++) {
-            cout << ans[i][j] << " \n"[j == n];
+        if (i & 1) {
+            cout << le.top() << '\n';
         }
     }
 
@@ -1857,8 +1847,8 @@ struct SegmentTree {
         if (!seg[cur].tag) {
             return; 
         }
-        seg[lc].val += (mid - s + 1) * seg[cur].tag;
-        seg[rc].val += (t - mid) * seg[cur].tag;
+        seg[lc].val += T(mid - s + 1) * seg[cur].tag;
+        seg[rc].val += T(t - mid) * seg[cur].tag;
         seg[lc].tag += seg[cur].tag;
         seg[rc].tag += seg[cur].tag;
         seg[cur].tag = 0;
@@ -1875,7 +1865,7 @@ struct SegmentTree {
             cur = ++ idx;
         }
         if (lo <= s && t <= ro) {
-            seg[cur].val += (t - s + 1) * val;
+            seg[cur].val += T(t - s + 1) * val;
             seg[cur].tag += val;
             return; 
         }
@@ -9085,7 +9075,9 @@ namespace FastIO {
 
     template<typename T, typename... Ts>
     void write(T x, Ts... oth) {
-        if (pw > maxsz - 20) flush();
+        if (pw > maxsz - 20) {
+            flush();
+        }
         if (x < 0) {
             wbuf[pw ++] = '-';
             x = -x;
@@ -11603,25 +11595,37 @@ using namespace std;
 
 using i64 = long long;
 
+template<typename T>
 struct Matrix {
     static constexpr int mod = 1e9 + 7;
     
-    int mat[2][2]{};
+    T mat[2][2]{};
     
-    Matrix operator * (Matrix mat) const {
+    Matrix() {}
+
+    Matrix(T a, T b, T c = T{}, T d = T{}) : mat{a, b, c, d} {}
+    
+    Matrix operator * (const Matrix &b) const {
         Matrix res;
         for (int i = 0; i < 2; i ++)
             for (int k = 0; k < 2; k ++) {
-                int tmp = this -> mat[i][k];
+                T tmp = mat[i][k];
                 for (int j = 0; j < 2; j ++) {
-                    res.mat[i][j] = (res.mat[i][j] + 1ll * tmp * mat.mat[k][j]) % mod;
+                    if (!tmp) {
+                        continue;
+                    }
+                    if constexpr (is_integral_v<T>) {
+                        res.mat[i][j] = (res.mat[i][j] + 1ll * tmp * b.mat[k][j]) % mod;
+                    } else {
+                        res.mat[i][j] += tmp * b.mat[k][j];
+                    }
                 }
             }
         return res;
     }
 
-    Matrix &operator *= (Matrix mat) {
-        return *this = *this * mat; 
+    Matrix &operator *= (const Matrix &b) {
+        return *this = *this * b; 
     }
 
     static Matrix binpow(Matrix a, i64 b) {
@@ -11649,7 +11653,7 @@ int main() {
         return 0;
     }
     
-    cout << (Matrix{1, 1, 0, 0} * Matrix::binpow(Matrix{0, 1, 1, 1}, n - 2)).mat[0][1] << '\n';
+    cout << (Matrix{1, 1, 0, 0} * Matrix<int>::binpow(Matrix{0, 1, 1, 1}, n - 2)).mat[0][1] << '\n';
 
     return 0;
 }

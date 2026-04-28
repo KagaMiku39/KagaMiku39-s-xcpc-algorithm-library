@@ -58,7 +58,9 @@ namespace FastIO {
 
     template<typename T, typename... Ts>
     void write(T x, Ts... oth) {
-        if (pw > maxsz - 20) flush();
+        if (pw > maxsz - 20) {
+            flush();
+        }
         if (x < 0) {
             wbuf[pw ++] = '-';
             x = -x;

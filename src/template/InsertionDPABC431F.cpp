@@ -165,11 +165,75 @@ using ModInt64 = ModIntBase<u64, P>;
 constexpr u32 P = 998244353;
 using Z = ModInt<P>;
 
+constexpr int maxn = 4e5 + 1, mod = 998244353;
+
+int fac[maxn];
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
-
     
+    fac[0] = 1;
+    for (int i = 1; i < maxn; i ++) {
+        fac[i] = (1ll * fac[i - 1] * i % mod);
+    }
+    
+    auto comb = [&](int m, int n) -> Z {
+        auto binpow = [&](int a, int b) {
+            int res = 1 % mod;
+            a %= mod;
+            while (b) {
+                if (b & 1) {
+                    res = 1ll * res * a % mod;
+                }
+                a = 1ll * a * a % mod;
+                b /= 2;
+            }
+            return res;
+        };
+        auto inv = [&](int x) {
+            return binpow(x, mod - 2);
+        };
+        if (n < 0 || n > m) {
+            return 0;
+        }
+        return 1ll * fac[m] * inv(fac[n]) % mod * inv(fac[m - n]) % mod;
+    };
+    
+    int n, d;
+    cin >> n >> d;
+
+    vector<int> a(n + 1);
+    for (int i = 1; i <= n; i ++) {
+        cin >> a[i];
+    }
+
+    sort(next(begin(a)), end(a));
+
+    vector<pair<int, int>> vec{{}};
+    for (int i = 1; i <= n; i ++) {
+        auto &[val, cnt] = vec.back();
+        if (val == a[i]) {
+            cnt ++;
+        } else {
+            vec.emplace_back(a[i], 1);
+        }
+    }
+
+    Z sum = 0;
+    vector<Z> dp(ssize(vec));
+    dp[0] = 1;
+    for (int i = 1, j = 1; i < ssize(vec); i ++) {
+        auto &[val, cnt] = vec[i];
+        while (j < i && vec[j].first + d < val) {
+            sum -= vec[j].second;
+            j ++;
+        }
+        dp[i] = comb(cnt + int(sum), int(sum)) * dp[i - 1];
+        sum += cnt;
+    }
+
+    cout << dp.back() << '\n';
+
     return 0;
 }

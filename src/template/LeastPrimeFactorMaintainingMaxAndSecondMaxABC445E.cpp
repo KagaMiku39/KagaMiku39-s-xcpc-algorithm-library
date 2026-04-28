@@ -3,7 +3,26 @@
 using namespace std;
 
 using u32 = unsigned;
+using i64 = long long;
 using u64 = unsigned long long; 
+
+template<typename T>
+bool cmin(T &a, const T &b) {
+    return a > b ? a = b, true : false;
+}
+
+template<typename T>
+bool cmax(T &a, const T &b) {
+    return a < b ? a = b, true : false;
+}
+
+constexpr int maxa = 1e7 + 1;
+
+int lpf[maxa];
+
+bitset<maxa> ispri;
+
+vector<int> pri;
 
 template<typename T>
 constexpr T power(T a, u64 b) {
@@ -165,11 +184,83 @@ using ModInt64 = ModIntBase<u64, P>;
 constexpr u32 P = 998244353;
 using Z = ModInt<P>;
 
+void solve() {   
+    int n;
+    cin >> n;
+
+    vector<int> a(n + 1);
+    for (int i = 1; i <= n; i ++) {
+        cin >> a[i];
+    }
+
+    map<int, int> mx1, mx2;
+    map<pair<int, int>, int> cnt;
+    for (int i = 1; i <= n; i ++) {
+        int tmp = a[i];
+        while (tmp > 1) {
+            int l = lpf[tmp];
+            while (tmp % l == 0) {
+                cnt[{i, l}] ++;
+                tmp /= l;
+            }
+            if (mx1[l] <= cnt[{i, l}]) {
+                mx2[l] = mx1[l];
+                cmax(mx1[l], cnt[{i, l}]);
+            } else {
+                cmax(mx2[l], cnt[{i, l}]);
+            }
+        }
+    }
+
+    Z ans{1};
+    for (auto &[a, b]: mx1) {
+        ans *= power(a, b);
+    }
+
+    for (int i = 1; i <= n; i ++) {
+        int tmp = a[i];
+        Z res = ans;
+        while (tmp > 1) {
+            int l = lpf[tmp];
+            if (cnt[{i, l}] == mx1[l]) {
+                res /= power(l, mx1[l]);
+                res *= power(l, mx2[l]);
+            }
+            tmp /= power(l, cnt[{i, l}]);
+        }
+        cout << res << " \n"[i == n];
+    }
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-
-
     
+    ispri.set();
+    ispri[0] = ispri[1] = false;
+    for (int i = 2; i < maxa; i ++) {
+        if (ispri[i]) {
+            lpf[i] = i;
+            pri.emplace_back(i);
+        }
+        for (int &j: pri) {
+            if (1ll * i * j > maxa) {
+                break;
+            }
+            ispri[i * j] = false;
+            lpf[i * j] = j;
+            if (i % j == 0) {
+                break;
+            }
+        }
+    }
+    
+    int t;
+    cin >> t;
+
+    while (t --) {
+        solve();
+    }
+
     return 0;
 }

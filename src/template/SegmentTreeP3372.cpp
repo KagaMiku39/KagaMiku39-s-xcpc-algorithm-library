@@ -53,8 +53,8 @@ struct SegmentTree {
         if (!seg[cur].tag) {
             return; 
         }
-        seg[lc].val += (mid - s + 1) * seg[cur].tag;
-        seg[rc].val += (t - mid) * seg[cur].tag;
+        seg[lc].val += T(mid - s + 1) * seg[cur].tag;
+        seg[rc].val += T(t - mid) * seg[cur].tag;
         seg[lc].tag += seg[cur].tag;
         seg[rc].tag += seg[cur].tag;
         seg[cur].tag = 0;
@@ -71,7 +71,7 @@ struct SegmentTree {
             cur = ++ idx;
         }
         if (lo <= s && t <= ro) {
-            seg[cur].val += (t - s + 1) * val;
+            seg[cur].val += T(t - s + 1) * val;
             seg[cur].tag += val;
             return; 
         }

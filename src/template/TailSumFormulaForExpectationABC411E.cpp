@@ -169,7 +169,57 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
+    int n;
+    cin >> n;
 
+    vector<int> vec;
+    vector<array<int, 7>> a(n + 1);
+    for (int i = 1; i <= n; i ++) {
+        for (int j = 1; j <= 6; j ++) {
+            cin >> a[i][j];
+            vec.emplace_back(a[i][j]);
+        }
+    }
+
+    sort(begin(vec), end(vec));
+
+    vec.erase(unique(begin(vec), end(vec)), end(vec));
+
+    map<int, int> mp;
+    for (int i = 0; int &j: vec) {
+        mp[j] = i ++;
+    }
     
+    vector<vector<int>> id(ssize(vec));
+    for (int i = 1; i <= n; i ++) {
+        for (int j = 1; j <= 6; j ++) {
+            id[mp[a[i][j]]].emplace_back(i);
+        }
+    }
+
+    int tot = 0;
+    Z ans = 0, ter = 1;
+    vector<int> cnt(n + 1);
+    for (int i = 0; i < ssize(vec) - 1; i ++) {
+        for (int &j: id[i]) {
+            if (cnt[j]) {
+                ter /= cnt[j];   
+                ter *= ++ cnt[j];
+            } else {
+                tot ++;
+                cnt[j] ++;
+            }
+        }
+        if (tot == n) {
+            ans += ter * Z{vec[i + 1] - vec[i]};
+        }
+    }
+
+    ans /= power<Z>(6, n);
+
+    ans = Z{vec.back()} - ans;
+    
+    cout << ans << '\n';
+
     return 0;
 }

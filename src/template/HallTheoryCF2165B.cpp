@@ -6,6 +6,11 @@ using u32 = unsigned;
 using u64 = unsigned long long; 
 
 template<typename T>
+bool cmax(T &a, const T &b) {
+    return a < b ? a = b, true : false;
+}
+
+template<typename T>
 constexpr T power(T a, u64 b) {
     T res {1};
     for (; b != 0; b /= 2, a *= a) {
@@ -34,7 +39,7 @@ struct ModIntBase {
 public:
     constexpr ModIntBase() : x {0} {}
      
-    constexpr ModIntBase(bool x_) : x {x_ ? 1U : 0U} {}
+    constexpr ModIntBase(bool x_) : x {x_ ? 1 : 0} {}
     
     template<typename T>
     requires std::integral<T>
@@ -165,11 +170,48 @@ using ModInt64 = ModIntBase<u64, P>;
 constexpr u32 P = 998244353;
 using Z = ModInt<P>;
 
+void solve() {   
+    int n;
+    cin >> n;
+
+    vector<int> a(n + 1);
+    map<int, int> mp;
+    for (int i = 1; i <= n; i ++) {
+        cin >> a[i];
+        mp[a[i]] ++;
+    }
+
+    int mx = 0;
+    for (auto &[_, cnt]: mp) {
+        cmax(mx, cnt);
+    }
+
+    vector<Z> dp(n + 1);
+    dp[0] = 1;
+    for (auto &[_, cnt]: mp) {
+        for (int j = n; j >= cnt; j --) {
+            dp[j] += dp[j - cnt] * Z{cnt}; 
+        }
+    }
+
+    Z ans = 0;
+    for (int i = mx; i <= n; i ++) {
+        ans += dp[i];
+    }
+
+    cout << ans << '\n';
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
+    int t;
+    cin >> t;
 
-    
+    while (t --) {
+        solve();
+    }
+
     return 0;
 }
