@@ -244,7 +244,7 @@ int main() {
             pri.emplace_back(i);
         }
         for (int &j: pri) {
-            if (1ll * i * j > maxa) {
+            if (1ll * i * j >= maxa) {
                 break;
             }
             ispri[i * j] = false;

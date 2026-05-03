@@ -22,7 +22,7 @@ int main() {
             pri.emplace_back(i);
         }
         for (int &j: pri) {
-            if (1ll * i * j > maxn) {
+            if (1ll * i * j >= maxn) {
                 break;
             }
             ispri[i * j] = false;
