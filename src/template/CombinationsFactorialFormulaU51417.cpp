@@ -9,10 +9,10 @@ constexpr int maxn = 3e7 + 1, mod = 1e9 + 7;
 int fac[maxn];
 
 void solve() {
-    int m, n;
-    cin >> m >> n;
+    int n, m;
+    cin >> n >> m;
     
-    auto comb = [&](int m, int n) -> int {
+    auto comb = [&](int n, int m) -> int {
         auto binpow = [&](int a, int b) {
             int res = 1 % mod;
             a %= mod;
@@ -28,13 +28,13 @@ void solve() {
         auto inv = [&](int x) {
             return binpow(x, mod - 2);
         };
-        if (n < 0 || n > m) {
+        if (m < 0 || m > n) {
             return 0;
-        }
-        return 1ll * fac[m] * inv(fac[n]) % mod * inv(fac[m - n]) % mod;
+        }        
+        return 1ll * fac[n] * inv(fac[m]) % mod * inv(fac[n - m]) % mod;
     };
     
-    cout << comb(m, n) << '\n';
+    cout << comb(n, m) << '\n';
 }
 
 int main() {
