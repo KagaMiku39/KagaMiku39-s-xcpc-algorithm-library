@@ -36,6 +36,11 @@ name="$2"
 # 移除文件名可能带有的 .cpp 后缀，确保后续的文件名拼接正确
 name="${name%.cpp}"
 
+# Accept Codeforces IDs copied from URLs, e.g. 2275/D -> 2275D.
+if [[ "$name" =~ ^([0-9]+)/([A-Za-z][A-Za-z0-9]*)$ ]]; then
+    name="${BASH_REMATCH[1]}${BASH_REMATCH[2]}"
+fi
+
 # 2. 文件创建
 if [[ "$type" == "0" ]]; then
     if [[ ! -f "$name.cpp" ]]; then
