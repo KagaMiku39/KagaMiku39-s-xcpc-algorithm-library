@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# 记得先 chmod +x run.sh
-
 # =========================================================
 # 脚本配置
 # =========================================================
@@ -15,10 +13,18 @@ RE='\033[0;35m'     # 品红 - Runtime Error
 C='\033[0;36m'      # 青色 - 提示信息
 NC='\033[0m'        # 恢复默认颜色
 
-# 模板文件路径
-# 请确保这两个文件存在于 /home/kagamiku39/code/ 目录下
-tstdio="/home/kagamiku39/code/template.cpp"
-tfileio="/home/kagamiku39/code/templateio.cpp"
+# 从脚本实际所在的目录读取模板，也支持通过软链接启动。
+script_path=$(realpath -e -- "${BASH_SOURCE[0]}") || exit 1
+script_dir=$(dirname -- "$script_path")
+
+tstdio="$script_dir/template.cpp"
+tfileio="$script_dir/templateio.cpp"
+
+open_in_editor() {
+    if command -v code >/dev/null 2>&1; then
+        code "$@"
+    fi
+}
 
 # =========================================================
 # 脚本主逻辑
@@ -50,9 +56,9 @@ if [[ "$type" == "0" ]]; then
             echo "${C}Execution cancelled.${NC}"
             exit 1
         fi
-        cp "$tstdio" "./$name.cpp"
+        cp -- "$tstdio" "./$name.cpp" || exit 1
         echo -e "${C}Creating source file: $name.cpp${NC}"
-        code "$name.cpp"
+        open_in_editor "$name.cpp"
         exit 0
     fi
 fi
@@ -65,15 +71,15 @@ if [[ "$type" == "1" ]]; then
             echo "${C}Execution cancelled.${NC}"
             exit 1
         fi
-        cp "$tfileio" "./$name.cpp"
+        cp -- "$tfileio" "./$name.cpp" || exit 1
         echo -e "${C}Creating source file: $name.cpp${NC}"
-        code "$name.cpp"
+        open_in_editor "$name.cpp"
     fi
     for file in "$name.out" "$name.ans" "$name.in"; do
         if [[ ! -f "$file" ]]; then
             echo -e "${C}Creating file: $file${NC}"
             touch "$file"
-            code "$file"
+            open_in_editor "$file"
             if [[ "$file" == "$name.in" ]]; then
                 exit 0
             fi
@@ -86,8 +92,12 @@ ulimit -s 524288 > /dev/null 2>&1
 ulimit -v unlimited > /dev/null 2>&1
 
 # 4. 编译C++源文件
+# 使用临时可执行文件，避免题名为 run 时覆盖脚本入口。
+binary=$(mktemp -- "${TMPDIR:-/tmp}/xcpc-run.XXXXXX") || exit 1
+trap 'rm -f -- "$binary"' EXIT
+
 echo -e "${C}Compiling source file: $name.cpp...${NC}"
-if ! g++ -std=c++23 -O2 -Wall -Wextra "$name.cpp" -o "$name"; then
+if ! g++ "-std=${CXX_STD:-c++23}" -O2 -Wall -Wextra "$name.cpp" -o "$binary"; then
     echo -e "${Y}Error: Compile Error${NC}"
     exit 1
 fi
@@ -95,8 +105,7 @@ fi
 # 5. 根据模式运行程序
 if [[ "$type" == "0" ]]; then
     echo -e "${C}Running in standard I/O mode...${NC}"
-    ./"$name"
-    rm -f "$name"
+    "$binary"
     exit 0
 fi
 
@@ -113,7 +122,7 @@ if [[ "$type" == "1" ]]; then
     fi
     
     echo -e "${C}Running and checking for errors...${NC}"
-    timeout 5s "./$name" < "$name.in" > "$name.tmp"
+    timeout 5s "$binary" < "$name.in" > "$name.tmp"
     exitcode=$?
     
     if [[ $exitcode -ne 0 ]]; then
@@ -122,7 +131,6 @@ if [[ "$type" == "1" ]]; then
         else
             echo -e "${RE}Runtime Error${NC}"
         fi
-        rm -f "$name"
         rm -f "$name".tmp
         exit 1
     fi
@@ -145,9 +153,8 @@ if [[ "$type" == "1" ]]; then
         echo -e "${R}Wrong Answer${NC}"
         # 直接在终端中打印差异
         diff $diffoptions "$name.ans" "$name.out"
-        code --diff "$name.out" "$name.ans"
+        open_in_editor --diff "$name.out" "$name.ans"
     fi
 fi
 
-# 7. 清理可执行文件
-rm -f "$name"
+exit 0
